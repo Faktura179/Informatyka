@@ -1,0 +1,2 @@
+# Informatyka
+Repo z lekcjami :)
