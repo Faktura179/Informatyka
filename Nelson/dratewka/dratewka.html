@@ -5,10 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dratewka</title>
+    <script src="dratewka.js"></script>
     <script>
-    
+        class Location{
+            constructor(position,text,image,color,south,north,east,west){
+                this.position=position
+                this.text = text
+                this.image = image
+                this.color = color
+                this.south = south
+                this.north=north
+                this.east=east
+                this.west=west
+            }
+            show(){
+                var text=document.getElementById("text")
+                var img = document.getElementById("img")
+                var location=document.getElementById("location")
+
+                text.innerText = this.text
+                img.src ="img/"+this.image
+                img.style.backgroundColor=this.color
+                var locTxt = "You can go "
+                if(this.south)
+                    locTxt+="South, "
+                if(this.north)
+                    locTxt+="North, "
+                if(this.east)
+                    locTxt+="East, "
+                if(this.west)
+                    locTxt+="West, "
+                locTxt=locTxt.substring(0,locTxt.length-2)                
+                location.innerText=locTxt
+            }
+        }
+        var map = []
+        for (const key in dane) {
+            if (dane.hasOwnProperty(key)) {
+                const element = dane[key];
+                map.push(new Location(key,element.text,element.img,element.color,element.south,element.north,element.east,element.west))
+            }
+        }
+        var game={
+            position:{x:4,y:7},
+
+        }
+        document.addEventListener("DOMContentLoaded", function(){
+            var com =document.getElementById("command")
+            com.onblur=function(e){this.focus()}
+            map[27].show()
+        },false);
     </script>
     <style>
+    body{
+        background: grey;
+    }
+    input{
+        outline: 0px;
+        background: grey;
+        border: 0px;
+        height: 35px;
+        font-size: 15px;
+        color: white;
+    }
     @font-face {
         font-family: "PressStart2P";
         src: url(fonts/PressStart2P.ttf) format("truetype");
@@ -16,9 +75,23 @@
     *{
         font-family: PressStart2P;
     }
+    p, input{
+        display: inline;
+    }
+    img{
+        width: 300px;
+        height: 200px;
+        border:1px solid white;
+    }
+    div,p,img{
+        margin:10px;
+    }
     </style>
 </head>
 <body>
-    
+    <div id="text"></div>
+    <img id="img">
+    <div id="location"></div>
+    <p>What now? </p> <input type="text" name="command" id="command" autofocus="autofocus">
 </body>
 </html>
