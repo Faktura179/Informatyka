@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <style>
+        h1{
+            color: Blue;
+        }
+        .menu{
+            background: blue;
+            color:white;
+    
+        }
+        a{
+            color: white;
+            font-size:2em;
+            margin-left:10px;
+        }
+        </style>
+</head>
+<body>
+    <h1>Projekt: login</h1>
+    <div class="menu"><a href="/">Main</a> <a href="/register">register</a><a href="/login">login</a><a href="/admin">admin</a></div>
+    <form action="/loginuser" method="post">
+        <label for="login">login</label><input type="text" name="login"><br/>
+        <label for="pass">password</label><input type="password" name="pass" id="pass"><br/>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

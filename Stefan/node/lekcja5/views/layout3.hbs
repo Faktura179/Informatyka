@@ -1,0 +1,19 @@
+<form action="/send" method="GET">
+<table>
+    <tr><td>Ubezpieczenie: </td><td><input type="checkbox" name="ubez" id="a"></td></tr>  
+    <tr><td>benzyna: </td><td><input type="checkbox" name="benzyna" id="b"></td></tr>
+    <tr><td>uszkodzony: </td><td><input type="checkbox" name="uszkodzony" id="c"></td></tr>
+    <tr><td>Napęd 4x4: </td><td><input type="checkbox" name="naped" id="c"></td></tr>
+</table>
+<button type="submit">Dodaj do bazy</button>
+</form>
+
+<form method="get">
+<table>
+    <tr><td></td><td>Ubezpieczony</td><td>benzyna</td><td>uszkodzony</td><td>napęd 4x4</td><td></td><td></td></tr>
+    {{#each arr}}
+       <tr><td>{{@index}}</td><td>{{this.ubezpieczony}}</td><td>{{this.benzyna}}</td><td>{{this.uszkodzony}}</td><td>{{this.naped}}</td><td><button formaction="/usun" name="_id" value="{{this._id}}" onclick="return confirm('czy usunąć?')">Usuń</button></td><td><button formaction="/edytuj" name="_id" value="{{this._id}}" onclick="">Edytuj</button></td></tr>
+    {{/each}}
+</table>
+<button formaction="/previous">Previous</button> <button formaction="/next">Next</button> 
+</form>

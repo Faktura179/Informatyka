@@ -1,0 +1,5 @@
+<table>
+    {{#each users}}
+        <tr><td>login: {{this.login}}</td><td>password: {{this.password}} </td><td>age: {{#each age_iter}}*{{@index}}{{/each}}</td></tr>
+    {{/each}}
+</table>

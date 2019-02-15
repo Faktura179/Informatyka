@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="three.js"></script>
+    <script src="jquery.js"></script>
+    <script src="js.js"></script>
+    <style>
+    body{
+        margin:0;
+        overflow:hidden;
+    }
+    input{
+        position: absolute;
+        top:100px;
+        left: 100px;
+    }
+    #buttons{
+        position: absolute;
+        top:50px;
+        left:100px;
+    }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <input type="range" name="fov" id="fov" value="100" min="1" max="179">
+    <div id="buttons">
+    <button id="sphere">Sfera</button>
+    <button id="cube">Szescian</button>
+    <button id="cone">Stozek</button>
+    <button id="icohedron">Icosahedron</button>
+</div>
+</body>
+</html>

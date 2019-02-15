@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script>
+        let kwiatki =[]
+        let i =0
+        let licznik=0
+        $(document).ready(function(){
+            $(".main").on("mousedown",function(e){
+                var posX = e.clientX
+                var posY = e.clientY
+                
+                kwiatki.push({top:posY,left:posX})
+                $(".main").append($("<div>").addClass("kwiat")
+                    .css("top",posY-50+"px").css("left",posX-50+"px").append($("<p>").text(kwiatki.length-1)))
+            })
+            
+            $(".step").on("click", function(){
+                $(".pszczola").css("top",kwiatki[i]["top"]).css("left",kwiatki[i]["left"])
+                i+=1
+                if(i>=kwiatki.length){
+                    i=0;
+                }
+            })
+
+            $(".jump").on("click",function(){
+                setInterval(function(){$(".step").trigger("click")},1000)
+            })
+            start=false
+            $(".fly").on("click",function(){
+                if(!start){
+                    $(".step").trigger("click")
+                    start=true
+                }
+                let vector
+                if(i<=kwiatki.length-1){
+                    vector = {x:(kwiatki[i]["left"]-kwiatki[i-1]["left"])/100,y:(kwiatki[i]["top"]-kwiatki[i-1]["top"])/100}
+                }else{
+                    vector = {x:(kwiatki[0]["left"]-kwiatki[kwiatki.length-1]["left"])/100,y:(kwiatki[0]["top"]-kwiatki[kwiatki.length-1]["top"])/100}
+                }
+                console.log(vector)
+                $(".pszczola").css("top",parseFloat($(".pszczola").css("top").slice(0,-2))+vector["y"])
+                    .css("left",parseFloat($(".pszczola").css("left").slice(0,-2))+vector["x"])
+                licznik+=1
+                if(licznik==100){
+                    licznik=0
+                    i+=1
+                }
+                if(i>kwiatki.length){
+                    i=1
+                }
+                requestAnimationFrame(function(){$(".fly").trigger("click")})
+            })
+        })
+    </script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        .kwiat{
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            z-index: 3;
+            background-position: center;
+            background-size: 200%;
+            background-image: url("https://t2.ftcdn.net/jpg/01/95/17/85/1000_F_195178568_WU7okvy5Za1bAQkXGpBvFeh3ntrjmhl9.jpg");
+            text-align: center;
+        }
+        body{
+            overflow:hidden;
+        }
+        .main{
+            position: relative;
+            background-color: green;
+            width:80%;
+            height: 100vh;
+            float:left;
+        }
+        .buttons{
+            width:20%; 
+            float: left;
+        }
+        button{
+            display:block;
+            margin:0 auto;
+            margin-top:20px;
+        }
+        p{
+            font-size: 2em;
+            margin-top:30px;
+        }
+        .pszczola{
+            position: absolute;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="pszczola"><img src="https://ecsmedia.pl/c/tm-toys-pszczolka-maja-maskotka-maja-w-iext48862405.jpg" alt="a" width="50" height="50"></div>
+    </div>
+    <div class="buttons">
+        <button class="step">STEP</button>
+        <button class="jump">JUMP</button>
+        <button class="fly">FLY</button>
+    </div>
+</body>
+</html>
+

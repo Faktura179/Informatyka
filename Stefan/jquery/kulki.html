@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script>
+    $(document).ready(function(){
+        var x0=$(window).width()/2
+        var y0=$(window).height()/2
+        var zawartosc=["-pi","-pi/2","0","pi/2","pi"]
+        var skala =[]
+        var skala_gora=[]
+        var kulki=[]
+        for(let i =-2; i<3;i++){
+            skala.push($("<div>").append($("<p>").text(zawartosc[i+2])).addClass("skala").css("top",y0-7+"px"))
+            skala[i+2].css("left",x0+i*100-1+"px")
+            $("body").append(skala[i+2])
+        }
+        for(let i =-1; i<2;i++){
+            skala_gora.push($("<div>").addClass("skala_gora").css("left",x0-7+"px"))
+            skala_gora[i+1].css("top", y0-100*i-1+"px")
+            $("body").append(skala_gora[i+1])
+        }
+
+        $(window).on("resize",function(){
+            x0=$(window).width()/2
+            y0=$(window).height()/2
+            for(let i =-2;i<3;i++){
+                skala[i+2].css("left",x0+i*100-1+"px").css("top",y0-7+"px")
+            }
+            for(let i =-1; i<2;i++){
+                skala_gora[i+1].css("left",x0-7+"px").css("top", y0-100*i-1+"px")
+            }
+        })
+        $("#btn1").on("click",function(){
+            $("#kulki").on("input",function(){
+                let ilosc =$(this).val()
+                $(".divkulki").remove()
+                kulki=[]
+                for (let i = 0; i < ilosc; i++) {
+                    kulki.push($("<div>").css("width",$("#kula").val()+"px").css("height",$("#kula").val()+"px").css("border-radius",$("#kula").val()/2+"px")
+                        .addClass("divkulki")
+                        .css("left",x0+$("#promien").val()*Math.cos(2*Math.PI/$(this).val()*i)-$("#kula").val()/2+"px")
+                        .css("top",y0+$("#promien").val()*Math.sin(2*Math.PI/$(this).val()*i)-$("#kula").val()/2+"px"))
+                    $("body").append(kulki[i])
+
+                }
+                $("#kolory").trigger("change")
+            })
+            $("#kulki").trigger("input")
+            $("#kula").on("input",function(){
+                for (let i = 0; i < kulki.length; i++) {
+                    kulki[i].css("width",$("#kula").val()+"px").css("height",$("#kula").val()+"px").css("border-radius",$("#kula").val()/2+"px")
+                            .css("left",x0+$("#promien").val()*Math.cos(2*Math.PI/$("#kulki").val()*i)-$("#kula").val()/2+"px")
+                            .css("top",y0+$("#promien").val()*Math.sin(2*Math.PI/$("#kulki").val()*i)-$("#kula").val()/2+"px")
+                }
+            })
+            $("#promien").on("input",function(){
+                for (let i = 0; i < kulki.length; i++) {
+                    kulki[i].css("left",x0+$("#promien").val()*Math.cos(2*Math.PI/$("#kulki").val()*i)-$("#kula").val()/2+"px")
+                            .css("top",y0+$("#promien").val()*Math.sin(2*Math.PI/$("#kulki").val()*i)-$("#kula").val()/2+"px")
+                }
+            })
+            $("#kolory").change(function(){
+                if($(this).prop("checked")){
+                    
+                    for (let i = 0; i < kulki.length; i++) {
+                        console.log(kulki)
+                        if(i%2==0){
+                            kulki[i].css("background-color","rgb(120,255,0)")
+                        }else{
+                            kulki[i].css("background-color", "rgba(255,0,0,150)")
+                        }
+                    }
+                }else{
+                    for (let i = 0; i < kulki.length; i++) {
+                        kulki[i].css("background-color", "rgba(255,0,0,150)")
+                    }
+                }
+            })
+            $("#dookola").change(function(){
+                if($(this).prop("checked")){
+                    let i =0;
+                    a =setInterval(function(){
+                        for (let j = 0; j < kulki.length; j++) {
+                            kulki[j].hide();
+                        }
+                        kulki[i].show()
+                        i++
+                        if(i>=kulki.length){
+                            i=0;
+                        }
+                    },300)
+                }else{
+                    clearInterval(a)
+                    for (let i = 0; i < kulki.length; i++) {
+                        kulki[i].show();
+                    }
+                    console.log(a)
+                }
+            })
+        })
+
+    })
+    </script>
+    <style>
+        input, button{
+            display:inline-block;
+            position:static;
+        }
+        .divkulki{
+            background-color: rgba(255,0,0,150);
+            position: absolute;
+        }
+        body{
+            margin:0;
+            padding:0;
+            overflow:hidden;
+            width:100vw;
+            height: 100vh;
+        }
+        #strona{
+            width:100%;
+            height:100%;
+        }
+        #pionowa{
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background-color:grey;
+            left:50%;
+            top:0;
+        }
+        #pozioma{
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color:grey;
+            top:50%;
+        }
+        .skala{
+            position:absolute;
+            background-color:blue;
+            z-index: 5;
+            width: 3px;
+            height: 15px;
+        }
+        .skala_gora{
+            position: absolute;
+            background-color: blue;
+            width: 15px;
+            height:3px;
+            z-index: 5; 
+        }
+        p{
+            position: fixed;
+            color: blue;
+        }
+        #kolory{
+            top:50px;
+        }
+        #dookola{
+            top:100px;
+        }
+        #kula{
+            top: 150px;
+        }
+        #kulki{
+            top: 200px;
+        }
+        #promien{
+            top: 250px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn1">Okrąg</button><br>
+    <input type="checkbox" name="kolory" id="kolory">kolory <br>
+    <input type="checkbox" name="dookola" id="dookola">dookola <br>
+    <input type="range" name="kula" id="kula" min="10" max="200" value="30"> wielkosc kul <br>
+    <input type="range" name="kulki" id="kulki" min="3" max="15" value="6"> ilosc kulek <br> 
+    <input type="range" name="promien" id="promien" min="25" max="600" value="80"> promien kola <br>
+    <div id="pionowa"></div>
+    <div id="pozioma"></div>
+</body>
+</html>

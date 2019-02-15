@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            var tab=[]
+            var tab2=[]
+            var iter=1;
+            var left = true;
+            for(let i=0;i<5;i++){
+                tab[i]=[]
+                for(let j =0;j<5;j++){
+                    tab[i][j]=$("<div>").addClass("srodkowy").css("top",50*i).css("left",50*j)
+                        .on("click",function(){
+                            $(this).css("background-color","yellow").attr("clicked",true)
+                            tab2.push({"left":$(this).css("left"),"top":$(this).css("top")})
+                        })
+                    $("#full").append(tab[i][j])
+                }
+            }
+
+            $("#start").on("click",function(){
+                if(tab2.length<4){
+                    alert("Za mała długość")
+                    return;
+                }
+                $("#player1").css("top",tab2[0]["top"]).css("left",tab2[0]["left"])
+                $("#player2").css("top",tab2[tab2.length-1]["top"]).css("left",tab2[tab2.length-1]["left"])
+            })
+            $("#next").on("click",function(){
+                if(left){
+                $("#player1").css("top",tab2[iter]["top"]).css("left",tab2[iter]["left"])
+                }else{
+                $("#player2").css("top",tab2[tab2.length-1-iter]["top"]).css("left",tab2[tab2.length-1-iter]["left"])
+                }
+                if(iter<tab2.length-1 && left==false){
+                    iter++;
+                }
+                left=!left
+            })
+            $("#reset").on("click",function(){
+                $(".srodkowy").css("background-color", "white")
+                tab2=[]
+                iter=1;
+                $("#player1").css("top","250px").css("left","0")
+                $("#player2").css("top","250px").css("left","75px")
+            })
+
+        })
+    </script>
+    <style>
+        #full{
+            position: relative;
+            display: table;
+            margin:0 auto;
+        }
+        .srodkowy{
+            border:1px solid black;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+        }
+        #player1{
+            background-color:chartreuse;
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            border: 1px solid black;
+            border-radius: 25px;
+            top:250px;
+            left: 0;
+            z-index: 5;
+        }
+        #player2{
+            background-color: brown;
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            border: 1px solid black;
+            border-radius: 25px;
+            top:250px;
+            left: 75px;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <button id="start">Start game</button>
+    <button id="next">Next move</button>
+    <button id="reset">Reset</button>
+
+    <div id="full">
+
+        <div id="player1"></div>
+        <div id="player2"></div>
+    </div>
+</body>
+</html>

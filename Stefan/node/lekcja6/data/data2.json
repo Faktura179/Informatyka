@@ -1,0 +1,20 @@
+{
+    "subject": "ćwiczenie 2 - each, with -> szablon tabeli",
+    "users": [
+      {
+        "login": "aaa",
+        "password": "bbb",
+        "age": 16
+      },
+      {
+        "login": "ccc",
+        "password": "ddd",
+        "age": 23
+      },
+      {
+        "login": "eee",
+        "password": "fff",
+        "age": 34
+      }
+    ]
+  }

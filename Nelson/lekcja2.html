@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var text = "Wieczór wyborczy poprowadzą Bartosz Węglarczyk, dyrektor programowy Onetu oraz Tomasz Lis, redaktor naczelny 'Newsweeka'." 
+        text = prompt("podaj zdanie: ")
+        var arr=text.split("")
+        arr.forEach((item,index)=>{
+            if(item==item.match(/[aieouyAIOUYEąĄęĘóÓ]/)){
+                document.write("<strong style='color:red'>",item,"</strong>")
+            }else{document.write(item)}
+        });
+
+        /*var tab =eval(prompt("podaj tablice"))
+        console.log(tab)
+        while(true){
+            var przesuniecie = prompt("ile przesunac - p/l i liczba, k - koniec")
+            if(przesuniecie[0]=="k"){
+                break;
+            }
+            var przesuniecie_x =0;
+            for(let i = przesuniecie.length-1;i>0;i-- ){
+                przesuniecie_x+=parseInt(przesuniecie[przesuniecie.length-i])*Math.pow(10,i-1)
+               // console.log(parseInt(przesuniecie[przesuniecie.length-i])*Math.pow(10,i-1))
+            }
+
+            przesuniecie_x%=tab.length
+            //alert(przesuniecie_x)
+            if(przesuniecie[0].toLowerCase()=="p"){
+                for(let i = 0;i<przesuniecie_x;i++){
+                    tab.unshift(tab.pop())
+                }
+            }
+            if(przesuniecie[0].toLowerCase()=="l"){
+                for(let i = 0;i<przesuniecie_x;i++){
+                    tab.push(tab.shift())
+                }
+            }
+            console.log(tab)
+            alert("["+tab+"]")
+
+        }*/
+      /*  var word =prompt("podaj slowo do znalezienia").toLowerCase()
+
+        arr = text.split(" ");
+        document.write("<br>")
+        arr.forEach((item,index)=>{
+            if(item[item.length-1]==item[item.length-1].match(/[,.]/)){
+                if(item.substr(0,item.length-1).toLowerCase()==word){
+                    document.write("<u>",item.substr(0,item.length-1),"</u>",item[item.length-1])
+                }else{
+                    document.write(item)
+                }
+            }else{
+                if(item.toLowerCase()==word){
+                    document.write("<u>",item,"</u>")
+                }
+                else{
+                    document.write(item)
+                }
+            }
+            document.write(" ")
+        })
+    */
+        arr=text.toLowerCase().replace(/[.,?!:;"']/g,"").split(" ")
+        //console.log(arr)
+
+        let slowa={}
+        arr.forEach((item,index)=>{
+            if(slowa[item]==undefined){
+                slowa[item]=1
+            }else{
+                slowa[item]+=1
+            }
+        })
+        
+        //console.log(slowa)
+        let arr_slowa =[]
+        for(var slowo in slowa){
+            arr_slowa.push([slowo,slowa[slowo]])
+        }
+        //console.log(arr_slowa)
+        
+        arr_slowa.sort((a,b)=>{
+            return b[1]-a[1]
+        })
+        
+        var color = new Array(3)
+        document.write("<br>")
+        arr_slowa.forEach((item,index)=>{
+            
+            if(index%5==0){
+                color[0]=Math.round(Math.random()*255)
+                color[1]=Math.round(Math.random()*255)
+                color[2]=Math.round(Math.random()*255)
+            }
+            document.write("<span style='color:rgb(",color[0],",",color[1],",",color[2],")'>",item[0]," - ",item[1],"</span><br>")
+        })
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

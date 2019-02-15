@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            var tab1 = ["lp", "cena", "produkt"]
+            var tab2 = ["5,60", "3,23", "7,45", "10,00", "3,20"]
+            var tab3 = ["chleb", "mąka", "masło","kefir", "dżem"]
+            $("#tabela").hide();
+
+            $("#btn1").on("click", function(){
+                $("#tabela").show();
+                var tr=$("<tr>")
+                for(let i =0;i<tab1.length;i++){
+                    var td=$("<td>").addClass("pierwsza").append(tab1[i])
+                    tr.append(td)
+                }
+                $("#tabela").append(tr)
+                for(let i =0;i<tab2.length;i++){
+                    var tr=$("<tr>")
+                    var td1=$("<td>").append(i+1)
+                    var td2=$("<td>").append(tab2[i])
+                    var td3=$("<td>").append(tab3[i])
+                    
+                    tr.append(td1)
+                    tr.append(td2)
+                    tr.append(td3)
+
+                    $("#tabela").append(tr)
+                }
+                var tr=$("<tr>")
+                var td1=$("<td>").append("suma")
+                let suma =0;
+                for(let i =0;i<tab2.length;i++){
+                    let liczba = parseFloat(tab2[i].replace(",","."))
+                    suma+=liczba;
+                }
+                var td2=$("<td>").append(suma).addClass("suma").attr("colspan",2)
+                tr.append(td1)
+                tr.append(td2)
+                $("#tabela").append(tr)
+            })
+        })
+    </script>
+    <style>
+    table, td{
+        border: 1px solid black !important;
+        text-align: center !important;
+        padding: 5px !important;
+    }
+    .pierwsza{
+        color:blue;
+        font-size: 2em;
+        font-weight: 600;
+    }
+    .suma{
+        color: red;
+        font-weight: 600;
+    }
+    </style>
+</head>
+<body>
+    <button id="btn1">Stwórz tabelę</button>
+    <table id="tabela">
+
+    </table>
+</body>
+</html>

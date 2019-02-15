@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function change(){
+            $.ajax({
+                method:"POST",
+                data:{a:$("#1").val()},
+                success:function(data){
+                    var obj = JSON.parse(data)
+                    $("#2").val(obj.a)
+                },
+                error:function(xhr){
+
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <input type="range" id="1" oninput="change()">
+    <input type="range" id="2">
+</body>
+</html>

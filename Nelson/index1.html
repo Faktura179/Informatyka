@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        document.write("<h1><strong>Witaj Javascript!</strong></h1><br>");
+        for (let i = -100; i < 101; i++) {
+            document.write(i, "<br>");
+        }
+        for (let i = 50; i > 0; i--) {
+            if(i%3==2){
+                document.write(i, " ");
+            }
+        }
+        document.write("<br>");
+        for (let i = 50; i > 9; i--) {
+            document.write(i, " ");
+        }
+        document.write("<br>");
+        for (let i = 39; i > 20; i--) {
+            document.write(i, " ");
+        }
+        for(let i=-20;i<40;i++){//parzyste <-20;40)
+            if(i%2==0){
+                console.log(i);
+            }
+        }
+        for(let i=6;i<12;i++){//parzyste (5;12)
+            if(i%2==0){
+                console.log(i);
+            }
+        }
+        for(let i=-10;i<40;i++){//nieparzyste <-10;40)
+            if(i%2==1){
+                console.log(i);
+            }
+        }
+        for(let i=3;i<12;i++){//nieparzyste (2;12)
+            if(i%2==1){
+                console.log(i);
+            }
+        }
+        for(let i=-100;i<40;i++){//podzielne przez 3 z przedziału <-100;40)
+            if(i%3==0){
+                console.log(i);
+            }
+        }
+        for(let i=-49;i<12;i++){//podzielne przez 3 z przedziału (-50;12)
+            if(i%3==0){
+                console.log(i);
+            }
+        }
+
+        let liczba_x = prompt("Podaj liczbę: ");
+        
+        for(let i = 0; i <liczba_x; i++){
+            document.write("X");
+        }
+        document.write("<table>");
+        for(let i = 0; i <liczba_x; i++){
+            document.write("<tr>");
+            if(i==0 || i==liczba_x-1){
+                for(let j = 0; j <liczba_x; j++){
+                    document.write("<td>X</td>")
+                }
+            }else{
+                document.write("<td>X</td>");
+                for(let j = 0; j <liczba_x-2; j++){
+                    document.write("<td>&nbsp;</td>");
+                }
+                document.write("<td>X</td>");
+            }
+            document.write("</tr>")
+        }
+        document.write("</table>");
+
+        for(let i = liczba_x; i>0;i--){
+            for(let j = 0; j<i-1;j++){
+                document.write("<span style='color: white;'>X</span>");
+            }
+            for(let j =0;j<liczba_x-i;j++){
+                document.write("X");
+            }
+            document.write("X");
+            for(let j =0;j<liczba_x-i;j++){
+                document.write("X");
+            }
+            document.write("<br>");
+        }
+        document.write("<br>");
+
+        for(let i =0;i<=liczba_x;i++){
+            for(let j=1;j<i+1;j++){
+                document.write(j);
+            }
+            document.write("<br>");
+        }
+
+        for(let i =liczba_x;i>0;i--){
+            for(let j=liczba_x;j>liczba_x-i+1;j--){
+                document.write("<span style='color: white;'>",j,"</span>");
+            }
+            for(let j=liczba_x-i+1;j>0;j--){
+                document.write(j);
+            }
+            document.write("<br>");
+        }
+        
+        let silnia=1;
+        for(let i =0; i<liczba_x;i++){
+            silnia=silnia*(i+1);
+        }
+        document.write(silnia,"<br>");
+
+        let suma =0;
+        for(let i=0;i<liczba_x;i++){
+            if(i%2==1){
+                suma+=i;
+            }
+        }
+        document.write(suma);
+
+        let pierwsza =true;
+        if(liczba_x==1){
+            pierwsza=false;
+        }
+        for(let i =2;i<liczba_x/2+1;i++){
+            if(liczba_x%i==0){
+                pierwsza=false;
+            }
+        }
+        if(pierwsza){
+            alert("pierwsza")
+        }else{
+            alert("nie pierwsza")
+        }
+
+        document.write("<table>")
+        for(let i=0;i<=liczba_x;i++){
+            document.write("<tr>")
+            for(let j=0; j<=liczba_x;j++){
+                if(i==0 && j==0){
+                    document.write("<td> </td>")
+                    continue
+                }
+                if(i==j){
+                    document.write("<td class='ukos'>",j*j,"</td>")
+                    continue
+                }
+                if(j==0){
+                    document.write("<td class='pierw'>",i,"</td>")
+                    continue
+                }
+                if(i==0){
+                    document.write("<td class='pierw'>",j,"</td>")
+                    continue 
+                }
+                document.write("<td class='srodek'>",j*i,"</td>")
+            }
+            document.write("</tr>")
+        }
+        document.write("</table>")
+
+        let pesel = prompt("Podaj pesel: ")
+        if(pesel.length!=11){
+            alert("Pesel jest błędny!")
+        }else{
+            for(let i =0;i<11;i++){
+                if(isNaN(parseInt(pesel[i]))==true){
+                    alert("Pesel jest błędny!")
+                }
+            }
+            let dzien = parseInt(pesel[4])*10+parseInt(pesel[5]);
+            let rok;
+            let miesiac;
+            switch(parseInt(pesel[2])){
+                case 0:
+                case 1:
+                    rok = 1900 + parseInt(pesel[0])*10+parseInt(pesel[1]);
+                    miesiac = parseInt(pesel[2]) * 10 + parseInt(pesel[3]);
+                    break;
+                case 2:
+                case 3:
+                    rok = 2000 + parseInt(pesel[0])*10+parseInt(pesel[1]);
+                    miesiac = (parseInt(pesel[2])-2) * 10 + parseInt(pesel[3]);
+                    break;
+                case 4:
+                case 5:
+                    rok = 2100 + parseInt(pesel[0])*10+parseInt(pesel[1]);
+                    miesiac = (parseInt(pesel[2])-4) * 10 + parseInt(pesel[3]);
+                    break;
+                case 6:
+                case 7:
+                    rok = 2200 + parseInt(pesel[0])*10+parseInt(pesel[1]);
+                    miesiac = (parseInt(pesel[2])-6) * 10 + parseInt(pesel[3]);
+                    break;
+                case 8:
+                case 9:
+                    rok = 1800 + parseInt(pesel[0])*10+parseInt(pesel[1]);
+                    miesiac = (parseInt(pesel[2])-8) * 10 + parseInt(pesel[3]);
+                    break;
+            }
+            let kontrolna = 9*parseInt(pesel[0]) + 7*parseInt(pesel[1]) + 3*parseInt(pesel[2]) + parseInt(pesel[3]) +  9*parseInt(pesel[4]) + 7*parseInt(pesel[5]) + 3*parseInt(pesel[6]) + parseInt(pesel[7]) + 9*parseInt(pesel[8]) + 7*parseInt(pesel[9]);
+            if(kontrolna%10!=pesel[10]){
+                alert("Pesel jest błędny!");
+            }else{
+                if(dzien>31 || miesiac>12 || dzien==0 || miesiac==0){
+                    alert("Pesel jest błędny!")
+                }else{
+                    document.write("Data urodzenia: ", rok, "-", dzien, "-", miesiac);
+
+                    if(parseInt(pesel[9])%2==0){
+                    document.write(". Płeć: Kobieta")
+                    }else{
+                    document.write(". Płeć: Mężczyzna")
+                    }
+                }
+            }
+        }
+
+    </script>
+    <style>
+        td{
+            width: 20px;
+            height: 20px;
+        }
+        .ukos{
+            background-color: white;
+        }
+        .pierw{
+            background-color: aqua;
+        }
+        .srodek{
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+</html>

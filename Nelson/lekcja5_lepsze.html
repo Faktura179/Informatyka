@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Posuwanie</title>
+</head>
+<script>
+    var gra
+    document.addEventListener("DOMContentLoaded", function(){
+        gra={
+            img:document.createElement("img"),
+            srcs:["zdjecie.jpg"],
+            menu:document.createElement("div"),
+            board:document.createElement("div"),
+            sizes:[3,4,5,6],
+            size:3,
+            buttons:[],
+            parts:[],
+            empty:{x:2,y:2},
+            init:function(){
+                this.img.src=this.srcs[0]
+                document.body.appendChild(this.img)
+                this.menu.classList.add("menu")
+                for(let i =0;i < this.sizes.length; i++){
+                    let button = document.createElement("button")
+                    button.innerHTML=this.sizes[i]+"x"+this.sizes[i]
+                    let size = this.sizes[i]
+                    button.onclick=(( size )=>{return ()=>{this.size=size;this.inside()}})(size)
+                    this.buttons.push(button)
+                    this.menu.appendChild(button)
+                }
+                document.body.appendChild(this.menu)
+                this.board.classList.add("board")
+                document.body.appendChild(this.board)
+                this.inside()
+            },
+            inside:function(){
+                this.board.innerHTML=""
+                for(let i = 0; i<this.size;i++){
+                    this.parts[i]=[]
+                    for(let j = 0; j<this.size;j++){
+                        let div=document.createElement("div")
+                        div.classList.add("square")
+                        div.style.top=(600/this.size)*i+"px"
+                        div.style.left=(600/this.size)*j+"px"
+                        div.style.width=(600/this.size)+"px"
+                        div.style.height=(600/this.size)+"px"
+                        div.style.backgroundImage="url("+this.srcs[0]+")"
+                        div.style.backgroundPositionX=-(600/this.size)*j+"px"
+                        div.style.backgroundPositionY=-(600/this.size)*i+"px"
+                        div.style.backgroundSize="600px 600px"
+                        var that = this
+                        div.onclick=function(e){
+                            e.stopPropagation()
+                            for(let i=0;i<that.parts.length;i++){
+                                var index = that.parts[i].indexOf(this)
+                                if(index!=-1){
+                                    that.swap(index,i)
+                                }
+                            }
+                        }
+                        this.board.appendChild(div)
+                        this.parts[i][j]=div
+                    }
+                }
+                this.parts[this.size-1][this.size-1].style.background="lightgrey"
+                this.empty.x=this.size-1
+                this.empty.y=this.size-1
+            },
+            swap:function(x,y){
+                if((this.empty.x==x && this.empty.y==y-1)||(this.empty.x==x && this.empty.y==y+1)||(this.empty.x==x-1 && this.empty.y==y)||(this.empty.x==x+1 && this.empty.y==y)){
+                    var tmpDiv = this.parts[y][x].cloneNode(true)
+                    this.parts[y][x].parentNode.removeChild(this.parts[y][x])
+                    this.parts[y][x]=this.parts[this.empty.y][this.empty.x]
+                    this.parts[this.empty.y][this.empty.x]=tmpDiv
+                    var that = this
+                    tmpDiv.onclick=function(e){
+                        e.stopPropagation()
+                        for(let i=0;i<that.parts.length;i++){
+                            var index = that.parts[i].indexOf(this)
+                            if(index!=-1){
+                                that.swap(index,i)
+                            }
+                        }
+                    }
+                    this.board.appendChild(this.parts[this.empty.y][this.empty.x])
+                    var tmpStyle = this.parts[this.empty.y][this.empty.x].cloneNode(true)
+                    var tmpStyle1 = this.parts[y][x].cloneNode(true)
+                    this.parts[this.empty.y][this.empty.x].style.top=tmpStyle1.style.top
+                    this.parts[this.empty.y][this.empty.x].style.left=tmpStyle1.style.left
+                    this.parts[y][x].style.top=tmpStyle.style.top
+                    this.parts[y][x].style.left=tmpStyle.style.left
+
+                    this.empty.y=y
+                    this.empty.x=x
+                }
+            }
+        }
+        gra.init()
+        
+
+    })
+</script>
+<style>
+    img{
+        display: block;
+        width:200px;
+        height:200px;
+        margin:0 auto;
+    }
+    .menu{    
+        display:flex;
+        justify-content: center;
+        margin: auto;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    button{
+        text-align: center;
+        margin:10px;
+        width:50px;
+    }
+    .board{
+        position: relative;
+        width:600px;
+        height: 600px;
+        border:1px solid black;
+        margin:auto;
+    }
+    .square{
+        position: absolute;
+        box-sizing: border-box;
+        border:1px solid black;
+    }
+</style>
+<body>
+    
+</body>
+</html>

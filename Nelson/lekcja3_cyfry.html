@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+</head>
+<body>
+    <img src="0.png" alt="0" width="50" height="50"><img src="1.png" alt="0" width="50" height="50"><img src="2.png" alt="0" width="50" height="50"><img src="3.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50"><img src="0.png" alt="0" width="50" height="50">
+    <script>
+            let imgs=document.querySelectorAll("img")
+            console.log(imgs)
+            let prawo=true;
+            setInterval(()=>{
+                if(imgs[0].getAttribute("src").slice(-5)=="1.png" || imgs[14].getAttribute("src").slice(-5)=="3.png"){prawo=!prawo}
+                let srcs=[]
+                for(let i =0;i<imgs.length;i++){
+                    srcs.push(imgs[i].src)
+                }
+                console.log(srcs)
+                if(prawo){
+                    srcs.unshift(srcs.pop())
+                }else{
+                    srcs.push(srcs.shift())
+                }
+                for(let i =0;i<srcs.length;i++){
+                    imgs[i].src=srcs[i]
+                }
+            },500)
+        </script>
+</body>
+</html>

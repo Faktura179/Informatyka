@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: greenyellow;
+        }    
+    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function wyslij(){
+            $.ajax({
+                url:"",
+                type:"POST",
+                data:{a:$("#1").val(),b:$("#2").val()},
+                success:function(data){
+                    var obj = JSON.parse(data)
+
+                    $("#div").text(obj.wynik)
+                },
+                error:function(xhr,status,error){
+                    console.log(xhr)
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="txt1" id="1">
+    <input type="text" name="txt2" id="2">
+    <div onclick="wyslij()">Kliknij</div>
+    <div id="div"></div>
+</body>
+</html>
