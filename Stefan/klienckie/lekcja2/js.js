@@ -1,14 +1,14 @@
 $(document).ready(function(){
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
-        45,    // kąt patrzenia kamery (FOV - field of view)
-        16/9,    // proporcje widoku, powinny odpowiadać proporjom naszego ekranu przeglądarki
+        90,    // kąt patrzenia kamery (FOV - field of view)
+        $(window).width()/$(window).height(),    // proporcje widoku, powinny odpowiadać proporjom naszego ekranu przeglądarki
         0.1,    // minimalna renderowana odległość
         10000    // maxymalna renderowana odległość od kamery 
     );
     var renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0xffffff);
-    renderer.setSize($(window).width(), $(window).width());
+    renderer.setSize($(window).width(), $(window).height());
     $("#root").append( renderer.domElement );
     var axes = new THREE.AxesHelper(1000)
     scene.add(axes)
@@ -27,6 +27,30 @@ $(document).ready(function(){
     var angle = 1
     var move=false;
     var button=-1
+    var raycaster = new THREE.Raycaster(); // obiekt symulujący "rzucanie" promieni
+    var mouseVector = new THREE.Vector2() // ten wektor czyli pozycja w przestrzeni 2D na ekranie(x,y) wykorzystany będzie do określenie pozycji myszy na ekranie a potem przeliczenia na pozycje 3D
+
+    $(document).mousedown(function (event) {
+        mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
+        raycaster.setFromCamera(mouseVector, camera);
+
+        var intersects = raycaster.intersectObjects(scene.children);
+   
+        console.log(intersects.length)
+        if (intersects.length > 0) {
+
+            //zerowy w tablicy czyli najbliższy kamery obiekt to ten, którego potrzebujemy:
+    
+            console.log(intersects[0].object); 
+          
+    }
+    
+
+    })
+    
+
+
 
     $(document).keydown(function(e){
         // console.log(e.which) 
