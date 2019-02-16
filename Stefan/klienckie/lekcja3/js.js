@@ -49,6 +49,80 @@ $(document).ready(function(){
     light.lookAt(cube.position);
     light.castShadow = true
     //scene.add(light);
+    class Controls{
+        constructor(){
+            this.height=200
+            this.distance=100
+            this.color=0xffffff
+            this.shadow=false
+            this.html = $("<div>")
+            var colors = $("<div>")
+            for(var i=0;i<6;i++){
+                var color = $("<span>")
+                color.width("20px")
+                color.height("20px")
+                switch(i){
+                    case 0:
+                        color.css("background-color","red")
+                        color.click(function(){
+                            this.color=0xff0000
+                        }.bind(this))
+                    break;
+                    case 1:
+                        color.css("background-color","green")
+                        color.click(function(){
+                            this.color=0x00ff00
+                        }.bind(this))
+                    break;
+                    case 2:
+                        color.css("background-color","blue")
+                        color.click(function(){
+                            this.color=0x0000ff
+                        }.bind(this))
+                    break;
+                    case 3:
+                        color.css("background-color","rgb(255,255,0)")
+                        color.click(function(){
+                            this.color=0xffff00
+                        }.bind(this))
+                    break;
+                    case 4:
+                        color.css("background-color","rgb(0,255,255)")
+                        color.click(function(){
+                            this.color=0x00ffff
+                        }.bind(this))
+                    break;
+                    case 5:
+                        color.css("background-color","white")
+                        color.click(function(){
+                            this.color=0xffffff
+                        }.bind(this))
+                    break;
+                }
+                colors.append(color)
+            }
+            this.html.append(colors)
+            var checkbox = $("<input type='checkbox'>")
+            checkbox.change(function(){
+                this.shadow=!this.shadow
+            }.bind(this))
+            this.html.append(checkbox)
+            var height = $("<input type='range' value='200' min='100' max='1000'>")
+            var distance = $("<input type='range' value='100' min='50' max='200'>")
+            height.on("input",function(e){
+                this.height = $(e.target).val()
+            }.bind(this))
+            distance.on("input",function(e){
+                this.distance = $(e.target).val()
+            }.bind(this))
+            this.html.append(height)
+            this.html.append(distance)
+            this.html.addClass("controls")
+        }
+        getHtml(){
+            return this.html
+        }
+    }
 
     class Light {
 
@@ -59,8 +133,9 @@ $(document).ready(function(){
         // np scena
             this.color=color
             this.scene = scene
-            this.position = position  
-
+            this.position = position 
+            this.controls = new Controls()
+            $("#controls").append(this.controls.getHtml())
         //dodatkowe zmienne tworzone w konstruktorze
         //widoczne w dalszych funkcjach
         //...
@@ -74,12 +149,12 @@ $(document).ready(function(){
         }
     
         init() {
-    
+            
             // utworzenie i spozycjonowanie światła
             this.light = new THREE.SpotLight(this.color, 3, 800, Math.PI / 10);
             this.light.position.set(0, 0, 0);
             this.light.lookAt(scene.position)
-            this.light.castShadow=true
+            this.light.castShadow=false
     
         // dodanie światła do kontenera
             this.container.add(this.light);
@@ -94,6 +169,19 @@ $(document).ready(function(){
             // dodanie do kontenera
             
             this.container.position.copy(this.position)
+            this.controls.getHtml().click(function(){
+                $(this).change()
+            })
+            this.controls.getHtml().on("input",function(){
+                $(this).change()
+            })
+            this.controls.getHtml().change(function(){
+                this.changeColor(this.controls.color)
+                this.light.castShadow=this.controls.shadow
+                this.container.position.x=this.position.x*(this.controls.distance/100)
+                this.container.position.z=this.position.z*(this.controls.distance/100)
+                this.container.position.y=this.controls.height
+            }.bind(this))
         }
     
     

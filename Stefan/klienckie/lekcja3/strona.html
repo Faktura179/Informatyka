@@ -14,10 +14,33 @@
             top:10px;
             left: 10px;
         }
+        #controls{
+            position: absolute;
+            right:10px;
+            top:10px;
+        }
+        .controls{
+            display: block;
+            border:1px solid grey;
+            background: lightgrey;
+        }
+        input{
+            display: block;
+            border:1px solid black;
+        }
+        div{
+            min-height: 20px;
+        }
+        span{
+            min-width: 20px;
+            min-height: 20px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <button id="btn">Light</button>
+    <div id="controls"></div>
     <div id="root"></div>
 </body>
 </html>
