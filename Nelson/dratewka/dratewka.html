@@ -8,8 +8,7 @@
     <script src="dratewka.js"></script>
     <script>
         class Location{
-            constructor(position,text,image,color,south,north,east,west){
-                this.position=position
+            constructor(text,image,color,south,north,east,west){
                 this.text = text
                 this.image = image
                 this.color = color
@@ -39,21 +38,76 @@
                 location.innerText=locTxt
             }
         }
-        var map = []
+        var map = {}
         for (const key in dane) {
             if (dane.hasOwnProperty(key)) {
                 const element = dane[key];
-                map.push(new Location(key,element.text,element.img,element.color,element.south,element.north,element.east,element.west))
+                map[key] = new Location(element.text,element.img,element.color,element.south,element.north,element.east,element.west)
             }
         }
         var game={
-            position:{x:4,y:7},
-
+            position:{y:4,x:7},
+            getPos:function(){return this.position.y + "" + this.position.x},
+            move:function(direction){
+                switch(direction.toLowerCase()){
+                    case "e":
+                        if(map[game.getPos()].east){
+                            this.position.x+=1
+                        }
+                    break;
+                    case "w":
+                        if(map[game.getPos()].west){
+                            this.position.x-=1
+                        }
+                    break;
+                    case "n":
+                        if(map[game.getPos()].north){
+                            this.position.y+=1
+                        }
+                    break;
+                    case "s":
+                        if(map[game.getPos()].south){
+                            this.position.y-=1
+                        }
+                    break;
+                }
+                map[game.getPos()].show()
+            },
+            action:function(action){
+                switch(action.toLowerCase()){
+                    case "east":
+                    case "e":
+                        this.move("e")
+                    break;
+                    case "west":
+                    case "w":
+                        this.move("w")
+                    break;
+                    case "north":
+                    case "n":
+                        this.move("n")
+                    break;
+                    case "south":
+                    case "s":
+                        this.move("s")
+                    break;
+                    default:
+                        alert("cannot do that")
+                }
+            },
         }
         document.addEventListener("DOMContentLoaded", function(){
             var com =document.getElementById("command")
-            com.onblur=function(e){this.focus()}
-            map[27].show()
+            com.onblur=function(e){setTimeout(()=>{this.focus()},0);this.focus()}
+            map[game.getPos()].show()
+
+            var input = document.getElementById("command")
+            input.onkeydown=function(e){
+                if(e.key=="Enter"){
+                    game.action(this.value)
+                    this.value=""
+                }
+            }
         },false);
     </script>
     <style>

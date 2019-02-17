@@ -15,7 +15,8 @@ fs.readdir(__dirname+"/static",function(err,files){
 var extensions={
     html:"text/html",
     json:"application/json",
-    css:"text/css"
+    css:"text/css",
+    js:"application/javascript"
 }
 
 function servResponse(req,res) {
@@ -36,7 +37,7 @@ function servResponse(req,res) {
 
     req.on("end", function (data) {
         var finish = qs.parse(allData)
-        res.end(JSON.stringify(finish));
+        
     })
 }
 
@@ -46,22 +47,20 @@ var server = http.createServer(function (req, res) {
     switch (req.method) {
         case "GET":
             // tu wykonaj załadowanie statycznej strony z formularzem
+            if(req.url=="/"){
+                req.url="/index.html"
+            }
             static.forEach(el=>{
-                if(req.url==el){
+                if(req.url=="/"+el){
                     var ext = el.split(".")[1]
                     fs.readFile("static/"+el,function(err,data){
                         res.writeHead(200, { "content-type": extensions[ext] })
                         res.write(data)
+                        res.end()
                     })
                     
                 }
             })
-            // fs.readFile("static/strona6.html", function (err, data) {
-            //     res.writeHead(200, { "content-type": "text/html;charset=utf-8" })
-            //     res.write(data)
-            //     res.end()
-            // })
-            
             break;
         case "POST":
             // wywołanie funkcji "servResponse", która pobierze dane przesłane 
