@@ -1,9 +1,9 @@
-console.log("wczytano plik Ui.js")
+//console.log("wczytano plik Ui.js")
 
 class Ui {
 
     constructor() {
-        console.log("konstruktor klasy Ui")
+       // console.log("konstruktor klasy Ui")
         this.clicks()
     }
 
@@ -11,34 +11,35 @@ class Ui {
 
     clicks() {
 
-        $("#albums").click(function () {
-            net.sendData()
+        $("#albums").click(function (e) {
+            var children = $(e.currentTarget).children()
+            children.each(function(index, element){
+                if(element.isSameNode(e.target)){
+                    net.sendData(index);
+                }
+            })
         })
 
     }
 
     albums(albums){
-        console.log(albums)
         var container = document.getElementById("albums")
         albums.forEach(el => {
-            var div = document.createElement("div")
-            div.classList.add("covers")
-            div.innerText=el
             var img = document.createElement("img")
             img.src="/"+el
             img.classList.add("img")
-            div.append(img)
-            container.append(div)
+            container.append(img)
         });
     }
 
-    songs(songs){
+    songs(songs,album){
         console.log(songs)
         var container = document.getElementById("songs")
+        $(container).empty()
         songs.forEach(el=>{
             var div = document.createElement("div")
             div.classList.add("song")
-            div.innerText=el
+            div.innerText=album +"/" +el 
             container.append(div)
         })
     }

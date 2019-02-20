@@ -25,14 +25,18 @@ body{
 #inner{
     overflow:hidden;
     height: 100%;
+    display: flex;
+    flex-flow: column;
 }
 #head{
     text-align: center;
     font-size: 2em;
+    flex: 0 1 50px;
 }
 #songs{
     height: 100%;
     overflow:auto;
+    flex: 1 1 auto;
 }
 #footer{
     margin-bottom:-100px; 

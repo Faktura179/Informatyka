@@ -1,4 +1,4 @@
-console.log("wczytano plik Net.js")
+//console.log("wczytano plik Net.js")
 
 
 
@@ -6,15 +6,37 @@ class Net {
     constructor() {
         this.a = 100 // użycie zmiennych
         this.b = 200
-        console.log("konstruktor klasy Net")
-        this.sendData(0) // wywołanie funkcji z tej samej klasy
+        //console.log("konstruktor klasy Net")
+        this.albums=[]
+        this.init()
+    }
+
+    init(){
+        $.ajax({
+            url: "/first",
+            data: {  },
+            type: "POST",
+            success: function (data) {
+                //czytamy odesłane z serwera dane
+                var obj = JSON.parse(data)
+                net.albums=obj.albums
+                //alert(JSON.stringify(obj))
+                ui.albums(obj.albums)
+                //tu wypisz sumę w div-ie na stronie
+                ui.songs(obj.songs,obj.album)
+        
+            },
+            error: function (xhr, status, error) {
+                console.log(status,error);
+            },
+        });
     }
 
     sendData(album) {
         // tutaj wysłanie danych ajaxem na serwer
         $.ajax({
-            url: "",
-            data: { album:album },
+            url: "/second",
+            data: { album:this.albums[album] },
             type: "POST",
             success: function (data) {
                 //czytamy odesłane z serwera dane
@@ -23,8 +45,7 @@ class Net {
                 //alert(JSON.stringify(obj))
         
                 //tu wypisz sumę w div-ie na stronie
-                ui.albums(obj.albums)
-                ui.songs(obj.songs)
+                ui.songs(obj.songs,obj.album)
         
             },
             error: function (xhr, status, error) {
