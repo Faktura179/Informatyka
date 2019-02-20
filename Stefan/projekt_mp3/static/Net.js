@@ -10,10 +10,6 @@ class Net {
         this.sendData(0) // wywołanie funkcji z tej samej klasy
     }
 
-    doSth() {
-        console.log("funcja doSth " + this.a + " - " + this.b)
-    }
-
     sendData(album) {
         // tutaj wysłanie danych ajaxem na serwer
         $.ajax({
@@ -24,9 +20,11 @@ class Net {
                 //czytamy odesłane z serwera dane
                 var obj = JSON.parse(data)
         
-                alert(JSON.stringify(obj))
+                //alert(JSON.stringify(obj))
         
                 //tu wypisz sumę w div-ie na stronie
+                ui.albums(obj.albums)
+                ui.songs(obj.songs)
         
             },
             error: function (xhr, status, error) {

@@ -12,11 +12,22 @@ fs.readdir(__dirname+"/static",function(err,files){
     });
     console.log(static)
 })
+var albums=[]
+fs.readdir(__dirname+"/static/mp3",function(err,files){
+    if(err){
+        return console.log(err)
+    }
+    files.forEach(element => {
+        albums.push(element)
+    });
+    console.log(albums)
+})
 var extensions={
     html:"text/html",
     json:"application/json",
     css:"text/css",
-    js:"application/javascript"
+    js:"application/javascript",
+    jpg:"image/jpg",
 }
 
 function servResponse(req,res) {
@@ -27,7 +38,7 @@ function servResponse(req,res) {
     // w poniższej funkcji nic nie modyfikujemy
 
     req.on("data", function (data) {
-        console.log("data: " + data)
+       // console.log("data: " + data)
         allData += data;
     })
 
@@ -37,7 +48,21 @@ function servResponse(req,res) {
 
     req.on("end", function (data) {
         var finish = qs.parse(allData)
-        
+        finish.songs=[]
+        finish.albums=albums
+        finish.album_name=albums[finish.album].replace(/_/g," ")
+        fs.readdir(__dirname+"/static/mp3/"+albums[finish.album],function(err,files){
+            if(err){
+                return res.end()
+            }
+            files.forEach(el=>{
+                if(el.split(".")[1]=="mp3")
+                finish.songs.push(el)
+            })
+            res.end(JSON.stringify(finish))
+            console.log(finish)
+        })
+
     })
 }
 
@@ -59,6 +84,13 @@ var server = http.createServer(function (req, res) {
                         res.end()
                     })
                     
+                }
+            })
+            albums.forEach(el=>{
+                if(req.url=="/"+el){
+                    var ext = "jpg"
+                    res.writeHead(200, { "content-type": extensions[ext] })
+                    fs.createReadStream("static/covers/"+el+"."+ext).pipe(res)
                 }
             })
             break;

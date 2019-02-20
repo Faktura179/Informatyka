@@ -20,6 +20,7 @@ body{
     width:200px;
     float: left;
     height: 100%;
+    overflow: auto;
 }
 #inner{
     overflow:hidden;
@@ -31,6 +32,7 @@ body{
 }
 #songs{
     height: 100%;
+    overflow:auto;
 }
 #footer{
     margin-bottom:-100px; 
@@ -40,4 +42,10 @@ body{
 }
 div{
     border:1px solid black;
+}
+.song{
+    height: 100px;
+}
+.img{
+    width:100%;
 }
