@@ -80,6 +80,10 @@ function servResponse(req,res) {
     })
 }
 
+function readFiles(){
+    
+}
+
 var server = http.createServer(function (req, res) {
     // parametr res oznacza obiekt odpowiedzi serwera (response)
     // parametr req oznacza obiekt żądania klienta (request)
@@ -93,10 +97,17 @@ var server = http.createServer(function (req, res) {
             static.forEach(el=>{
                 if(req.url=="/"+el){
                     var ext = el.split(".")[1]
-                    fs.readFile("static/"+el,function(err,data){
-                        res.writeHead(200, { "content-type": extensions[ext] })
-                        res.write(data)
-                        res.end()
+                    fs.stat("static/"+el,function(err,stats){
+                        if(stats.isFile()){
+                            fs.readFile("static/"+el,function(err,data){
+                                res.writeHead(200, { "content-type": extensions[ext] })
+                                res.write(data)
+                                res.end()
+                            })
+                        }else if(stats.isDirectory()){
+                            var files = []
+
+                        }
                     })
                     sent=true
                 }
