@@ -49,7 +49,18 @@ div{
 }
 .song{
     height: 100px;
+    flex:row;
+    display: flex;
+    align-content: space-between;
+    justify-content: space-between;
 }
 .img{
     width:100%;
+    cursor: pointer;
+}
+.inner_song{
+    border: 0px;
+}
+.play_pause{
+    display: none;
 }

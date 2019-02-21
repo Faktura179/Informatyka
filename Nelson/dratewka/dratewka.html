@@ -91,6 +91,26 @@
                     case "s":
                         this.move("s")
                     break;
+                    case "take":
+                    case "t":
+                        console.log("take")
+                    break;
+                    case "v":
+                    case "vocabulary":
+                        console.log("vocab")
+                    break;
+                    case "use":
+                    case "u":
+                        console.log("use")
+                    break;
+                    case "drop":
+                    case "d":
+                        console.log("drop")
+                    break;
+                    case "gossips":
+                    case "g":
+                        console.log("gossips")
+                    break;
                     default:
                         alert("cannot do that")
                 }
@@ -102,11 +122,30 @@
             map[game.getPos()].show()
 
             var input = document.getElementById("command")
+            var lower=false;
             input.onkeydown=function(e){
                 if(e.key=="Enter"){
                     game.action(this.value)
                     this.value=""
+                }else
+                if(e.key=="CapsLock"){
+                    lower=!lower
+                }else
+                if(e.key=="Shift"){
+                    lower=!lower
                 }
+            }
+            input.onkeyup=function(e){
+                if(e.key=="Shift"){
+                    lower=!lower
+                }
+            }
+            input.oninput=function(e){
+                console.log(this.value.length)
+                if(!lower && this.value.length>0)
+                    this.value[this.value.length -1]=this.value[this.value.length -1].toUpperCase()
+                else
+                    this.value[this.value.length -1]=this.value[this.value.length -1].toLowerCase()
             }
         },false);
     </script>

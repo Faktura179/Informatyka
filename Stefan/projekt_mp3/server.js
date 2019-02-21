@@ -2,16 +2,16 @@ var http = require("http");
 var qs = require("querystring")
 var fs = require("fs")
 
-var static = []
-fs.readdir(__dirname+"/static",function(err,files){
-    if(err){
-        return console.log(err)
-    }
-    files.forEach(element => {
-        static.push(element)
-    });
-    console.log(static)
-})
+// var static = []
+// fs.readdir(__dirname+"/static",function(err,files){
+//     if(err){
+//         return console.log(err)
+//     }
+//     files.forEach(element => {
+//         static.push(element)
+//     });
+//     //console.log(static)
+// })
 var albums=[]
 fs.readdir(__dirname+"/static/mp3",function(err,files){
     if(err){
@@ -20,7 +20,7 @@ fs.readdir(__dirname+"/static/mp3",function(err,files){
     files.forEach(element => {
         albums.push(element)
     });
-    console.log(albums)
+    //console.log(albums)
 })
 var extensions={
     html:"text/html",
@@ -28,6 +28,8 @@ var extensions={
     css:"text/css",
     js:"application/javascript",
     jpg:"image/jpg",
+    mp3:"audio/mpeg",
+    txt:"text/plain",
 }
 
 function servResponse(req,res) {
@@ -60,8 +62,9 @@ function servResponse(req,res) {
                     if(el.split(".")[el.split(".").length-1]=="mp3")
                     finish.songs.push(el)
                 })
+                res.writeHead(200, { "content-type": extensions["txt"] })
                 res.end(JSON.stringify(finish))
-                console.log(finish)
+                //console.log(finish)
             })
         }else if(req.url=="/second"){
             finish.songs=[]
@@ -73,15 +76,42 @@ function servResponse(req,res) {
                     if(el.split(".")[el.split(".").length-1]=="mp3")
                     finish.songs.push(el)
                 })
+                res.writeHead(200, { "content-type": extensions["txt"] })
                 res.end(JSON.stringify(finish))
-                console.log(finish)
+                //console.log(finish)
             })
         }
     })
 }
 
-function readFiles(){
-    
+function readFiles(req,res,dir,remove=""){
+    fs.readdir(__dirname+"/"+dir,function(err,files){
+        if(err){
+            return res.end()
+        }
+        files.forEach((file)=>{
+            fs.stat(__dirname+"/"+dir+"/"+file,function(err,f){
+                if(err){
+                    return res.end()
+                }
+                if(f.isDirectory()){
+                    readFiles(req,res,dir+"/"+file,remove)
+                }else{
+                    fs.readFile(__dirname+"/"+dir+"/"+file,function(err,data){
+                        if(err){
+                            return res.end()
+                        }
+                        var ext = file.split(".")[file.split(".").length-1]
+                        if(req.url==(dir+"/"+file).replace(remove,"")){
+                            res.writeHead(200, { "content-type": extensions[ext] })
+                            res.write(data)
+                            res.end()
+                        }
+                    })
+                }
+            })
+        })
+    })
 }
 
 var server = http.createServer(function (req, res) {
@@ -94,35 +124,8 @@ var server = http.createServer(function (req, res) {
             if(req.url=="/"){
                 req.url="/index.html"
             }
-            static.forEach(el=>{
-                if(req.url=="/"+el){
-                    var ext = el.split(".")[1]
-                    fs.stat("static/"+el,function(err,stats){
-                        if(stats.isFile()){
-                            fs.readFile("static/"+el,function(err,data){
-                                res.writeHead(200, { "content-type": extensions[ext] })
-                                res.write(data)
-                                res.end()
-                            })
-                        }else if(stats.isDirectory()){
-                            var files = []
-
-                        }
-                    })
-                    sent=true
-                }
-            })
-            albums.forEach(el=>{
-                if(req.url=="/"+el){
-                    var ext = "jpg"
-                    res.writeHead(200, { "content-type": extensions[ext] })
-                    fs.createReadStream("static/covers/"+el+"."+ext).pipe(res)
-                    sent=true
-                }
-            })
-            if(!sent){
-                res.end("404 Bad Gateway")
-            }
+            req.url=decodeURI(req.url)
+            readFiles(req,res,"static","static")
             break;
         case "POST":
             // wywołanie funkcji "servResponse", która pobierze dane przesłane 
