@@ -7,6 +7,17 @@
     <title>Dratewka</title>
     <script src="dratewka.js"></script>
     <script>
+        class Item{
+            constructor(id,string,flag,name){
+                this.id=id
+                this.string=string
+                this.flag=flag
+                this.name=name
+            }
+
+
+
+        }
         class Location{
             constructor(text,image,color,south,north,east,west){
                 this.text = text
@@ -16,6 +27,7 @@
                 this.north=north
                 this.east=east
                 this.west=west
+                this.item
             }
             show(){
                 var text=document.getElementById("text")
@@ -26,14 +38,30 @@
                 img.src ="img/"+this.image
                 img.style.backgroundColor=this.color
                 var locTxt = "You can go "
-                if(this.south)
+                var s= document.getElementById("south")
+                var n =document.getElementById("north")
+                var e =document.getElementById("east")
+                var w =document.getElementById("west")
+                s.style.display="block"
+                n.style.display="block"
+                w.style.display="block"
+                e.style.display="block"
+                if(this.south){
                     locTxt+="South, "
-                if(this.north)
+                    s.style.display="none"
+                }
+                if(this.north){
                     locTxt+="North, "
-                if(this.east)
+                    n.style.display="none"
+                }
+                if(this.east){
                     locTxt+="East, "
-                if(this.west)
+                    e.style.display="none"
+                }
+                if(this.west){
                     locTxt+="West, "
+                    w.style.display="none"
+                }
                 locTxt=locTxt.substring(0,locTxt.length-2)                
                 location.innerText=locTxt
             }
@@ -45,6 +73,15 @@
                 map[key] = new Location(element.text,element.img,element.color,element.south,element.north,element.east,element.west)
             }
         }
+        // map["13"].item= new Item()
+        // map["15"].item=new Item()
+        // map["17"].item=new Item()
+        // map["23"].item=new Item()
+        // map["27"].item=new Item()
+        // map["32"].item=new Item()
+        // map["44"].item=new Item()
+        // map["55"].item=new Item()
+        // map["64"].item=new Item()
         var game={
             position:{y:4,x:7},
             getPos:function(){return this.position.y + "" + this.position.x},
@@ -62,18 +99,52 @@
                     break;
                     case "n":
                         if(map[game.getPos()].north){
-                            this.position.y+=1
+                            this.position.y-=1
                         }
                     break;
                     case "s":
                         if(map[game.getPos()].south){
-                            this.position.y-=1
+                            this.position.y+=1
                         }
                     break;
                 }
                 map[game.getPos()].show()
             },
+            vocab:function(){
+                var text=document.getElementById("location")
+                text.innerHTML="NORTH or N, SOUTH or S</br>"
+                text.innerHTML+="WEST or W, EAST or E</br>"
+                text.innerHTML+="TAKE (object) or T (object)</br>"
+                text.innerHTML+="DROP (object) or D (object)</br>"
+                text.innerHTML+="USE (object) or U (object)</br>"
+                text.innerHTML+="GOSSIPS or G, VOCABULARY or V</br>"
+                text.innerHTML+="Press any key"
+                document.getElementById("command").oninput=function(){
+                    map[game.getPos()].show()
+                    document.getElementById("command").oninput=comm
+                    this.value=""
+                }
+            },
+            gossips:function(){
+                var text=document.getElementById("location")
+                text.innerHTML="The  woodcutter lost  his home key...</br>"
+                text.innerHTML+="The butcher likes fruit... The cooper</br>"
+                text.innerHTML+="is greedy... Dratewka plans to make a</br>"
+                text.innerHTML+="poisoned  bait for the dragon...  The</br>"
+                text.innerHTML+="tavern owner is buying food  from the</br>"
+                text.innerHTML+="pickers... Making a rag from a bag...</br>"
+                text.innerHTML+="Press any key"
+                document.getElementById("command").oninput=function(){
+                    map[game.getPos()].show()
+                    document.getElementById("command").oninput=comm
+                    this.value=""
+                }
+            },
             action:function(action){
+                var item=""
+                if(action.split(" ")[1]!=undefined)
+                    item = action.split(" ")[1].toLowerCase()
+                action=action.split(" ")[0]
                 switch(action.toLowerCase()){
                     case "east":
                     case "e":
@@ -93,23 +164,25 @@
                     break;
                     case "take":
                     case "t":
-                        console.log("take")
+                        console.log("take" ,item)
                     break;
                     case "v":
                     case "vocabulary":
-                        console.log("vocab")
+                        this.vocab()
                     break;
                     case "use":
                     case "u":
-                        console.log("use")
+                        console.log("use",item)
                     break;
                     case "drop":
                     case "d":
-                        console.log("drop")
+                        console.log("drop",item)
                     break;
                     case "gossips":
                     case "g":
-                        console.log("gossips")
+                        this.gossips()
+                    break;
+                    case "":
                     break;
                     default:
                         alert("cannot do that")
@@ -122,7 +195,8 @@
             map[game.getPos()].show()
 
             var input = document.getElementById("command")
-            var lower=false;
+            lower=false;
+            backspace = false
             input.onkeydown=function(e){
                 if(e.key=="Enter"){
                     game.action(this.value)
@@ -134,20 +208,32 @@
                 if(e.key=="Shift"){
                     lower=!lower
                 }
+                if(e.key=="Backspace" || e.key=="Delete"){
+                    backspace=true
+                }
             }
             input.onkeyup=function(e){
                 if(e.key=="Shift"){
                     lower=!lower
+                }else
+                if(e.key=="Backspace"|| e.key=="Delete"){
+                    backspace=false
                 }
             }
-            input.oninput=function(e){
-                console.log(this.value.length)
-                if(!lower && this.value.length>0)
-                    this.value[this.value.length -1]=this.value[this.value.length -1].toUpperCase()
-                else
-                    this.value[this.value.length -1]=this.value[this.value.length -1].toLowerCase()
-            }
+            input.oninput=comm
         },false);
+        function comm(e){
+            if(!backspace){
+                if(!lower){
+                    if(this.value.length>0)
+                        this.value=this.value.substring(0,this.value.length-1)+this.value[this.value.length -1].toUpperCase()
+                }
+                else{
+                    if(this.value.length>0)
+                        this.value=this.value.substring(0,this.value.length-1)+this.value[this.value.length -1].toLowerCase()
+                }
+            }
+        }
     </script>
     <style>
     body{
@@ -179,11 +265,51 @@
     div,p,img{
         margin:10px;
     }
+    #compass{
+        display: inline-block;
+        position: relative;
+    }
+    #south{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        bottom: 8px;
+        left: 141px;
+    }
+    #north{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        top:3px;
+        left:135px;
+    }
+    #east{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        right: 17px;
+        top:60px;
+    }
+    #west{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        top:60px;
+        left:17px;
+    }
     </style>
 </head>
 <body>
     <div id="text"></div>
-    <img id="img">
+    <img id="img" alt="obrazek"> <div id="compass"><img src="img/kompas.bmp" alt="kompas" id="comp"><div id="south"></div><div id="north"></div><div id="east"></div><div id="west"></div></div>
     <div id="location"></div>
     <p>What now? </p> <input type="text" name="command" id="command" autofocus="autofocus">
 </body>

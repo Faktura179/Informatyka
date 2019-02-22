@@ -1,23 +1,11 @@
-file = open("dane_lokacji_1.txt","r")
+file = open("items.txt","r")
 counter=0
 items=False
-json="{"
+json="var items = {"
 for line in file:
-    if items:
-        elements = line.split(", ")
-        json+="["
-        for element in elements:
-            #print(element)
-            if element.endswith("\n"):
-                element=element.strip("\n")
-            json+="\""+element+"\","
-        json+="],"
-    if line.split(" ")[0]=="WIERSZ":
-        json+=str(counter) + ":["
-        items=True
-    if line.index("\n")==0:
-        counter+=1
-        json+="],"
-        items=False
-json+="]}"
+    line.replace("-",":")
+    arr = line.split(",")
+    arr[0]=arr[0][5:]
+    json+="\""+line[:5]+"\"{"
+json+="}"
 print(json)
