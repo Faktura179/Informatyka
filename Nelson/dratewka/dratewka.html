@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dratewka</title>
     <script src="dratewka.js"></script>
+    <script src="items.js"></script>
     <script>
         class Item{
             constructor(id,string,flag,name){
@@ -15,7 +16,9 @@
                 this.name=name
             }
 
-
+            what(){
+                return this.string
+            }
 
         }
         class Location{
@@ -27,7 +30,7 @@
                 this.north=north
                 this.east=east
                 this.west=west
-                this.item
+                this.items=[]
             }
             show(){
                 var text=document.getElementById("text")
@@ -64,6 +67,42 @@
                 }
                 locTxt=locTxt.substring(0,locTxt.length-2)                
                 location.innerText=locTxt
+                location.innerHTML+="</br>You see "
+                if(this.items.length==0){
+                    location.innerText+=" nothing"
+                }else{
+                    var items=" "
+                    this.items.forEach(el=>{
+                        items+=el.what()+", "
+                    })
+                    items=items.substring(0,items.length-2)
+                    location.innerText+=items
+                }
+                game.carrying()
+            }
+
+            take(item){
+                for(var i = 0;i<this.items.length;i++){
+                    if(this.items[i].flag==1){
+                        var el=this.items[i]
+                        this.items.splice(i,1)
+                        return el
+                    }else{
+                        taken=true
+                        return -2
+                    }
+                }
+                return -1
+            }
+
+            itemsStored(){
+                var i=0
+                this.items.forEach(el=>{
+                    if(el.flag==1){
+                        i++
+                    }
+                })
+                return i
             }
         }
         var map = {}
@@ -73,18 +112,27 @@
                 map[key] = new Location(element.text,element.img,element.color,element.south,element.north,element.east,element.west)
             }
         }
-        // map["13"].item= new Item()
-        // map["15"].item=new Item()
-        // map["17"].item=new Item()
-        // map["23"].item=new Item()
-        // map["27"].item=new Item()
-        // map["32"].item=new Item()
-        // map["44"].item=new Item()
-        // map["55"].item=new Item()
-        // map["64"].item=new Item()
+        var items={}
+        for (const key in things) {
+            if (things.hasOwnProperty(key)) {
+                const element = things[key];
+                items[key] = new Item(key,element.string,element.flag,element.name)
+            }
+        }
+        
+        map["13"].items.push(items["31"])
+        map["15"].items.push(items["27"])
+        map["17"].items.push(items["14"])
+        map["23"].items.push(items["10"])
+        map["27"].items.push(items["18"])
+        map["32"].items.push(items["32"])
+        map["44"].items.push(items["21"])
+        map["55"].items.push(items["33"])
+        map["64"].items.push(items["24"])
         var game={
             position:{y:4,x:7},
             getPos:function(){return this.position.y + "" + this.position.x},
+            item:[],
             move:function(direction){
                 switch(direction.toLowerCase()){
                     case "e":
@@ -143,7 +191,7 @@
             action:function(action){
                 var item=""
                 if(action.split(" ")[1]!=undefined)
-                    item = action.split(" ")[1].toLowerCase()
+                    item = action.split(" ")[1]
                 action=action.split(" ")[0]
                 switch(action.toLowerCase()){
                     case "east":
@@ -164,7 +212,7 @@
                     break;
                     case "take":
                     case "t":
-                        console.log("take" ,item)
+                        this.take(item)
                     break;
                     case "v":
                     case "vocabulary":
@@ -172,11 +220,11 @@
                     break;
                     case "use":
                     case "u":
-                        console.log("use",item)
+                        this.use(item)
                     break;
                     case "drop":
                     case "d":
-                        console.log("drop",item)
+                        this.drop(item)
                     break;
                     case "gossips":
                     case "g":
@@ -186,6 +234,58 @@
                     break;
                     default:
                         alert("cannot do that")
+                }
+            },
+            carrying:function(){
+                var location = document.getElementById("location")
+                if(this.item.length==0){
+                    location.innerHTML+="</br>You are carrying nothing"
+                }else{
+                    location.innerHTML+="</br>You are carrying "+this.item[0].what()
+                }
+            },
+            take:function(item){
+                if(this.item.length==0){
+                    var taken = map[game.getPos()].take(item)
+                    if(taken!=-1){
+                        if(taken!=-2){
+                            this.item.push(taken)
+                            console.log("You took",item)
+                            map[game.getPos()].show()
+                        } else{
+                            console.log("You cannot carry it")
+                        }
+                    }
+                } else{
+                    console.log("inventory full")
+                }
+                
+            },
+            drop:function(item){
+                if(this.item.length==1){
+                    if(item == this.item[0].name){
+                        if(map[game.getPos()].itemsStored()<3){
+                            map[game.getPos()].items.push(this.item[0])
+                            this.item.pop() 
+                            map[game.getPos()].show()
+                            console.log("Dropped",item)
+                        } else{
+                            console.log("You cant store any more here")
+                        }
+                    }else{
+                        console.log("You are not carrying it")
+                    }
+                }else{
+                    console.log("You are carrying nothing")
+                }
+            },
+            use:function(item){
+                if(this.item.length==1){
+                    if(item==this.item[0].name){
+
+                    }else{
+                        console.log("You are not carrying it")
+                    }
                 }
             },
         }

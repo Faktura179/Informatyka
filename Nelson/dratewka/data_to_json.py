@@ -1,11 +1,11 @@
-file = open("items.txt","r")
+file = open("zaleznosci.txt","r")
 counter=0
 items=False
-json="var items = {"
+i=0
+json="var zaleznosci = {"
 for line in file:
-    line.replace("-",":")
     arr = line.split(",")
-    arr[0]=arr[0][5:]
-    json+="\""+line[:5]+"\"{"
+    json+="\""+str(i)+"\":{\"id\":\""+arr[0]+"\",\"lokacja\":\""+arr[1]+"\",\"id2\":\""+arr[2]+"\",\"komunikat\":\""+arr[3].replace("\n","")+"\"},\n"
+    i+=1
 json+="}"
 print(json)
