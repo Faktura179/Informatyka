@@ -195,6 +195,7 @@
                     case "e":
                         if(map[game.getPos()].east){
                             this.position.x+=1
+                            this.message("You are going east...")
                         }else{this.message("You can't go that way")}
                     break;
                     case "w":
@@ -206,16 +207,19 @@
                         }
                         if(map[game.getPos()].west){
                             this.position.x-=1
+                            this.message("You are going west...")
                         }else{this.message("You can't go that way")}
                     break;
                     case "n":
                         if(map[game.getPos()].north){
                             this.position.y-=1
+                            this.message("You are going north...")
                         }else{this.message("You can't go that way")}
                     break;
                     case "s":
                         if(map[game.getPos()].south){
                             this.position.y+=1
+                            this.message("You are going south...")
                         }else{this.message("You can't go that way")}
                     break;
                 }
