@@ -36,20 +36,22 @@
                         var func=function(){}
                         if(game.item[0].id==37){
                             dragKilled=true
-                            func=function(){map[game.getPos()].image="DS68.bmp";map[game.getPos().show()]}
+                            func=function(){map[game.getPos()].image="DS68.bmp";map[game.getPos()].show()}
                         }
                         if(game.item[0].id==33 && dragKilled==false){
+                            game.message("Nothing happened")
                             return
                         }
 
-
                         if(sheepEl==6 && dragKilled==false){
-                            game.message(zaleznosci[1].komunikat)
+                            game.message(kom[0],function(){game.message(zaleznosci[1].komunikat)})
                             game.item.pop()
                             game.item.push(items[parseInt(zaleznosci[1].id2)])
+                            map[game.getPos()].show()
+                            return
                         }
-                        for(var i = kom.length-1;i>0;i--){
-                            var f=func
+                        for(let i = kom.length-1;i>0;i--){
+                            let f=func
                             func=function(){game.message(kom[i],f)}
                         }
                         game.message(kom[0],func)
@@ -60,7 +62,7 @@
                         game.message("Nothing happened")
                     }
                 }else{
-                    console.log(wygrales)
+                    console.log("wygrales")
                 }
                 map[game.getPos()].show()
             }
