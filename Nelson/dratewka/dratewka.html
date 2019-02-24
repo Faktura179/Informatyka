@@ -23,21 +23,46 @@
             }
 
             use(location){
-                if(map[location]==zaleznosci[id].lokacja){
-                    if(location==43){
-                        sheepEl+=1
-                    }
-                    if(sheepEl==6){
-                        game.message(zaleznosci[1].komunikat)
+                var id =this.id
+                if(parseInt(zaleznosci[id].lokacja)!="00"){
+                    if(location==parseInt(zaleznosci[id].lokacja)){
+                        var L=false
+                        if(items[parseInt(zaleznosci[id].id2)].flag==0){
+                            sheepEl+=1
+                            map[game.getPos()].items.push(items[parseInt(zaleznosci[id].id2)])
+                            L=true
+                        }
+                        var kom=zaleznosci[id].komunikat.split("(timeout)")
+                        var func=function(){}
+                        if(game.item[0].id==37){
+                            dragKilled=true
+                            func=function(){map[game.getPos()].image="DS68.bmp";map[game.getPos().show()]}
+                        }
+                        if(game.item[0].id==33 && dragKilled==false){
+                            return
+                        }
+
+
+                        if(sheepEl==6 && dragKilled==false){
+                            game.message(zaleznosci[1].komunikat)
+                            game.item.pop()
+                            game.item.push(items[parseInt(zaleznosci[1].id2)])
+                        }
+                        for(var i = kom.length-1;i>0;i--){
+                            var f=func
+                            func=function(){game.message(kom[i],f)}
+                        }
+                        game.message(kom[0],func)
                         game.item.pop()
-                        game.item.push(items[parseInt(zaleznosci[1].id2)])
+                        if(!L)
+                            game.item.push(items[parseInt(zaleznosci[id].id2)])
+                    }else{
+                        game.message("Nothing happened")
                     }
-                    var kom=zaleznosci[id].komunikat.split("(timeout)")
-                    game.message()//nieskonczone
-                    game.item.pop()
-                    game.item.push(items[parseInt(zaleznosci[id].id2)])
-                    
+                }else{
+                    console.log(wygrales)
                 }
+                map[game.getPos()].show()
             }
         }
         class Location{
@@ -153,8 +178,6 @@
         map["55"].items.push(items["33"])
         map["64"].items.push(items["24"])
 
-        console.log(zaleznosci)
-
 
 
 
@@ -171,6 +194,12 @@
                         }else{this.message("You can't go that way")}
                     break;
                     case "w":
+                        if(game.getPos()==42){
+                            if(dragKilled==false){
+                                this.message("You can't go that way... ",()=>{game.message("The dragon sleeps in a cave!")})
+                                break;
+                            }
+                        }
                         if(map[game.getPos()].west){
                             this.position.x-=1
                         }else{this.message("You can't go that way")}
@@ -313,7 +342,7 @@
             use:function(item){
                 if(this.item.length==1){
                     if(item==this.item[0].name){
-
+                        this.item[0].use(this.getPos())
                     }else{
                         this.message("You are not carrying it")
                     }
@@ -341,6 +370,7 @@
         var lower
         var backspace
         var sheepEl=0
+        var dragKilled=false
         document.addEventListener("DOMContentLoaded", function(){
             var com =document.getElementById("command")
             com.onblur=function(e){setTimeout(()=>{this.focus()},0);this.focus()}

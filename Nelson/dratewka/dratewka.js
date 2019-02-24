@@ -222,7 +222,7 @@ var dane = {
         "south":false,
         "north":false,
         "east":true,
-        "west":false,
+        "west":true,
     },
     "43": {
         "text": "A perfect place to set a trap",
