@@ -43,6 +43,10 @@ body{
     width:100%;
     height:100px;
     background:blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 div{
     border:1px solid black;
@@ -63,4 +67,35 @@ div{
 }
 .play_pause{
     display: none;
+    background-size: 50px 100px;
+    background-repeat: space;
+    background-color: grey;
+}
+audio, source{
+    display: none;
+}
+#footer .play_pause{
+    background-size: 70px;
+    margin-left:50px;
+    margin-right: 50px;
+}
+#footer div{
+    display: inline-flex;
+    width: 75px;
+    height: 75px;
+    border-radius: 35px;
+}
+#prev{
+    background-image: url("/obrazki/back.png");
+    background-size: 70px 60px;
+    background-repeat: space;
+    background-position: center;
+    background-position-x: -2px;
+}
+#next{
+    background-image: url("/obrazki/forward.png");
+    background-size: 70px 60px;
+    background-repeat: space;
+    background-position: center;
+    background-position-x: 5px;
 }

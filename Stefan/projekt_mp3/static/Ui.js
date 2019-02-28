@@ -19,6 +19,12 @@ class Ui {
                 }
             })
         })
+        $("#prev").on("click",function(){
+            music.playPrevious()
+        })
+        $("#next").on("click",function(){
+            music.playNext()
+        })
     }
 
     albums(albums){
@@ -32,7 +38,8 @@ class Ui {
     }
 
     songClick(){
-        $(".song").toArray().forEach((el)=>{
+        $(".song").toArray().forEach((el,index)=>{
+            let i = index
             $(el).on("mouseover",function(e){
                 this.style.backgroundColor="blue"
             })
@@ -44,22 +51,37 @@ class Ui {
                 $("#audio_src")[0].src="/mp3/"+this.childNodes[0].innerText+"/"+this.childNodes[1].innerText
                 music.load()
                 music.song.style.backgroundColor="white"
+                if(music.song.childNodes.length>3)
+                    music.song.childNodes[3].style.display="none"
                 music.song=this
+                music.currentSong=i
+                console.log(music.currentSong, music.songs.length)
                 this.style.backgroundColor="blue"
                 this.childNodes[3].style.display="block"
+                $(".play_pause").toArray().forEach((el)=>{
+                    el.style.backgroundImage="url(/obrazki/pause.png)"
+                })
             })
         })
         $(".play_pause").toArray().forEach((el)=>{
+            $(el).off("click")
             $(el).on("click",function(e){
                 e.stopPropagation()
                 console.log(music.isPlaying)
                 if(music.isPlaying){
                     music.pause()
+                    $(".play_pause").toArray().forEach((el)=>{
+                        el.style.backgroundImage="url(/obrazki/play.png)"
+                    })
+                    
                 }else{
                     music.play()
+                    $(".play_pause").toArray().forEach((el)=>{
+                        el.style.backgroundImage="url(/obrazki/pause.png)"
+                    })
                 }
             })
-        })    
+        })
     }
 
     songs(songs,album){
@@ -79,7 +101,7 @@ class Ui {
             weight.innerText=" MB"
             weight.classList.add("inner_song")
             controls.classList.add("inner_song")
-            controls.style.background="grey"
+            controls.style.backgroundImage="url(/obrazki/pause.png)"
             controls.style.width="50px"
             controls.style.height="100px"
             controls.style.border="1px solid red"
@@ -90,7 +112,8 @@ class Ui {
             div.append(controls)
             container.append(div)
         })
-        this.songClick()
+        music.songs=songs
+       this.songClick()
     }
 
 }

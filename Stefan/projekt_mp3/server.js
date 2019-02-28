@@ -30,6 +30,7 @@ var extensions={
     jpg:"image/jpg",
     mp3:"audio/mpeg",
     txt:"text/plain",
+    png:"image/png",
 }
 
 function servResponse(req,res) {
