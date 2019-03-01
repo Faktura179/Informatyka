@@ -390,7 +390,10 @@
             div.append(czolowka)
             div.classList.add("czolowka")
             document.body.append(div)
-            setTimeout(()=>{div.style.display="none"},15000)
+            var audio = document.getElementById("hejnal")
+            audio.currentTime = 80
+            audio.play();
+            setTimeout(()=>{div.style.display="none"; audio.pause()},1000)
             setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_A.jpg"},5000)
             setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_B.jpg"},10000)
 
@@ -404,6 +407,12 @@
             input.onkeydown=onkdown
             input.onkeyup=onkup
             input.oninput=comm
+            document.onclick=function(){
+                document.getElementById("command").focus();
+            }
+            input.onchange=function(){
+                document.getElementById("input").innerText=this.value
+            }
         },false);
 
 
@@ -457,6 +466,7 @@
         height: 35px;
         font-size: 15px;
         color: white;
+        
     }
     .czolowka{
         background: black;
@@ -537,12 +547,37 @@
     *{
         color:rgb(209, 203, 203);
     }
+    audio{
+        display: none;
+    }
+    #caret{
+        width:10px;
+        height:35px;
+        background: white;
+    }
+    #caret{
+        display: inline;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+    input{
+        position: absolute;
+        top:-1000px;
+        left:-1000px;
+    }
+    #input{
+        margin-right: 3px;
+    }
     </style>
 </head>
 <body>
     <div id="text"></div>
     <img id="img" alt="obrazek"> <div id="compass"><img src="img/kompas.bmp" alt="kompas" id="comp"><div id="south"></div><div id="north"></div><div id="east"></div><div id="west"></div></div>
     <div id="location"></div>
-    <p id="what">What now? </p> <input type="text" name="command" id="command" autofocus="autofocus">
+    <p id="what">What now? </p> <input type="text" name="command" id="command" autofocus="autofocus"> <p id="input"></p><div id="caret">A</div>
+    <audio id="hejnal">
+        <source src="img/hejnal.mp3" type="audio/mpeg">
+    </audio>
 </body>
 </html>
