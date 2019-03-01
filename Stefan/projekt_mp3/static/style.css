@@ -44,7 +44,7 @@ body{
     height:100px;
     background:blue;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
 }
@@ -79,7 +79,11 @@ audio, source{
     margin-left:50px;
     margin-right: 50px;
 }
-#footer div{
+#footer>div{
+    border:none;
+    
+}
+#footer>div>div{
     display: inline-flex;
     width: 75px;
     height: 75px;
@@ -98,4 +102,13 @@ audio, source{
     background-repeat: space;
     background-position: center;
     background-position-x: 5px;
+}
+#controls{
+    width:340px;
+}
+#time{
+    width:100px;
+}
+#info{
+    width:300px;
 }

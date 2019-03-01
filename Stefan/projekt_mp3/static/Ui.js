@@ -25,6 +25,12 @@ class Ui {
         $("#next").on("click",function(){
             music.playNext()
         })
+        $("#audio").on("timeupdate",function(){
+            //console.log($("#audio").prop("currentTime"),$("#audio").prop("duration"))
+            var currTime=Math.floor(Math.floor( $("#audio").prop("currentTime"))/60)+":"+(Math.floor( $("#audio").prop("currentTime"))%60)
+            var durr=Math.floor(Math.floor($("#audio").prop("duration"))/60)+":"+(Math.floor( $("#audio").prop("duration"))%60)
+            $("#time").text(currTime+"/"+durr)
+        })
     }
 
     albums(albums){
@@ -56,6 +62,7 @@ class Ui {
                 music.song=this
                 music.currentSong=i
                 console.log(music.currentSong, music.songs.length)
+                $("#info").text(this.childNodes[0].innerText+"/ "+this.childNodes[1].innerText);
                 this.style.backgroundColor="blue"
                 this.childNodes[3].style.display="block"
                 $(".play_pause").toArray().forEach((el)=>{
