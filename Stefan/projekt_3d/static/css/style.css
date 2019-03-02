@@ -2,8 +2,8 @@ body{
     height: 100vh;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    width:100%;
+    overflow: hidden;
 }
 #left{
     background:lightgrey;
@@ -17,9 +17,7 @@ select{
     width:50px;
 }
 #plansza{
-    
     height: 100%;
-    padding: 20px;
     position: relative;
     overflow: auto;
 }
@@ -28,4 +26,29 @@ select{
     height: 100px;
     background-size: 110px 100px;
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.number{
+    text-align: center;
+    color: white;
+    font-weight: 900;
+}
+.arrow{
+    display: inline-block;
+    position: absolute;
+    width: 30px;
+    height: 24px;
+}
+.pusty_div{
+    width:20px;
+    height:20px;
+    opacity: 0;
+    display: inline-block;
+}
+.rotation_span{
+    position: absolute;
+    transform-origin: center;
 }
