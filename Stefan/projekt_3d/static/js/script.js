@@ -1,3 +1,4 @@
+var net = new Net()
 class Hex{
     constructor(x,y){
         this.x=x
@@ -66,4 +67,17 @@ $(document).ready(function(){
         }
     })
     $("#sel").trigger("change")
+    $("button").on("click",function(){
+        var map=[]
+        var i=0
+        field.forEach((e)=>{
+            e.forEach(el=>{
+                if(el.dir!=null){
+                    map.push({id:i,x:el.x,z:el.y,dir:el.dir})
+                    i++
+                }
+            })
+        })
+        net.sendData(map)
+    })
 })
