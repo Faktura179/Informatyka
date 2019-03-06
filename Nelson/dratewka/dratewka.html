@@ -64,7 +64,7 @@
                 }else{
                     var wygrana = document.getElementById("hiddenimg")
                     wygrana.src="https://ak6.picdn.net/shutterstock/videos/32435056/thumb/1.jpg"
-                    var div = document.getElementsByClassName("czolowka")
+                    var div = document.getElementsByClassName("czolowka")[0]
                     div.style.display="block"
                 }
                 map[game.getPos()].show()
@@ -362,6 +362,8 @@
                 }
             },
             message:function(msg,callback=()=>{}){
+                var caret = document.getElementById("caret")
+                caret.style.display="none"
                 var input = document.getElementById("command")
                 input.disabled=true
                 var p = document.getElementById("what")
@@ -369,8 +371,9 @@
                 setTimeout(function(){
                     p.innerText="What now? "
                     input.disabled=false
+                    caret.style.display="inline"
                     callback()
-                },2000)  
+                },200)  
             }
         }
 
@@ -410,9 +413,6 @@
             document.onclick=function(){
                 document.getElementById("command").focus();
             }
-            input.onchange=function(){
-                document.getElementById("input").innerText=this.value
-            }
         },false);
 
 
@@ -430,6 +430,7 @@
                         this.value=this.value.substring(0,this.value.length-1)+this.value[this.value.length -1].toLowerCase()
                 }
             }
+            document.getElementById("input").innerText=this.value
         }
         function onkup(e){
             if(e.key=="Shift"){
@@ -443,6 +444,7 @@
             if(e.key=="Enter"){
                 game.action(this.value)
                 this.value=""
+                document.getElementById("input").innerText=""
             }else
             if(e.key=="CapsLock"){
                 lower=!lower
