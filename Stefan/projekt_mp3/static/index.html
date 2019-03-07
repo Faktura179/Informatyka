@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="jQuery.js"></script>
+    <script src="Song.js"></script>
     <script src="Net.js"></script>
     <script src="Ui.js"></script>
     <script src="Music.js"></script>
@@ -13,6 +14,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="sidebar"><div id="playlist"></div></div>
     <div id="wrapper">
         <div id="content">
             <div id="albums"></div>
@@ -29,6 +31,8 @@
             </audio>
             <div id="info">album/song</div>
             <div id="controls">
+                <div id="length"></div>
+                <div id="progress"></div>
                 <div id="prev"></div>
                 <div class="play_pause"></div>
                 <div id="next"></div>
