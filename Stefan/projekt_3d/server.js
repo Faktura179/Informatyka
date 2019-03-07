@@ -7,13 +7,22 @@ var path = require("path")
 var bodyParser = require("body-parser")
 app.use(bodyParser.urlencoded({ extended: true })); 
 //nasłuch na określonym porcie
+var level=[]
+var id=0
 
 app.get("/",function(req,res){
     res.sendFile(path.join(__dirname + "/static/index.html"))
 })
 
 app.post("/map",function(req,res){
+    level.push({level:req.body,id:id})
+    id++
     res.send(req.body)
+    //console.log(level[0].level,"- req body -",req.body)
+})
+
+app.post("/load",function(req,res){
+    res.send(level[req.body.id])
 })
 
 app.listen(PORT, function () { 

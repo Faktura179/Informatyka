@@ -3,6 +3,7 @@ class Hex{
     constructor(x,y){
         this.x=x
         this.y=y
+        this.type=type
         this.htmlElement=$("<div>")
         this.htmlElement.css("background-image","url('gfx/hexagon.png')")
         this.htmlElement.addClass("hexagon")
@@ -38,6 +39,7 @@ class Hex{
         this.htmlElement.append(span)
     }
     click(){
+        this.type=type
         this.htmlElement.empty()
         if(this.dir==null || this.dir==5){
             this.dir=0
@@ -48,6 +50,7 @@ class Hex{
     }
 }
 var field=[]
+var type="wall"
 $(document).ready(function(){
     $("#sel").on("change",function(){
         var size = this.value
@@ -67,17 +70,32 @@ $(document).ready(function(){
         }
     })
     $("#sel").trigger("change")
-    $("button").on("click",function(){
+    $("#save").on("click",function(){
         var map=[]
         var i=0
         field.forEach((e)=>{
             e.forEach(el=>{
                 if(el.dir!=null){
-                    map.push({id:i,x:el.x,z:el.y,dir:el.dir})
+                    map.push({id:i,x:el.x,z:el.y,dirOut:el.dir,dirIn:(el.dir+3)%6,type:el.type})
                     i++
                 }
             })
         })
-        net.sendData(map)
+        net.sendData($("#sel").val(),map)
+    })
+    $("#load").on("click",function(){
+        net.getLevel(0)
+    })
+    $("#walls").on("click",function(){
+        type="wall"
+    })
+    $("#enemy").on("click",function(){
+        type="enemy"
+    })
+    $("#treasure").on("click",function(){
+        type="treasure"
+    })
+    $("#light").on("click",function(){
+        type="light"
     })
 })

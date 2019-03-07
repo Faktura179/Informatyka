@@ -1,9 +1,17 @@
+*{
+    user-select: none;
+    -webkit-user-select: none;
+}
 body{
     height: 100vh;
     margin: 0;
     padding: 0;
     width:100%;
     overflow: hidden;
+}
+button{
+    margin:0 auto;
+    margin-top:10px;
 }
 #left{
     background:lightgrey;
@@ -15,6 +23,16 @@ body{
 select{
     margin-bottom: 10px;
     width:50px;
+}
+#json{
+    float: left;
+    width: 300px;
+    height: 100%;
+    background: rgb(240, 240, 240);
+    overflow:auto;
+}
+#json_pre{
+    
 }
 #plansza{
     height: 100%;
