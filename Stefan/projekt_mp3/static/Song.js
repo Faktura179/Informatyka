@@ -11,7 +11,9 @@ class Song{
         var alb = document.createElement("div")
         var title = document.createElement("div")
         var weight = document.createElement("div")
+        var buttons = document.createElement("div")
         var controls = document.createElement("div")
+        var playlist = document.createElement("div")
         alb.innerText=this.album
         alb.classList.add("inner_song")
         title.innerText=this.name
@@ -21,13 +23,16 @@ class Song{
         controls.classList.add("inner_song")
         controls.style.backgroundImage="url(/obrazki/pause.png)"
         controls.style.width="50px"
-        controls.style.height="100px"
-        controls.style.border="1px solid red"
+        controls.style.height="50px"
         controls.classList.add("play_pause")
+        playlist.classList.add("add_to_playlist")
+        buttons.classList.add("btns")
+        buttons.append(controls)
+        buttons.append(playlist)
         div.append(alb)
         div.append(title)
         div.append(weight)
-        div.append(controls)
+        div.append(buttons)
         this.htmlElement=div
         
         return div

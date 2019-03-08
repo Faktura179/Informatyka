@@ -62,9 +62,9 @@ body{
 }
 .song{
     height: 100px;
-    flex:row;
+    flex-direction:row;
     display: flex;
-    align-content: space-between;
+    align-items: center;
     justify-content: space-between;
     border-top: 1px solid rgb(224, 224, 224);
 }
@@ -74,13 +74,20 @@ body{
 }
 .inner_song{
     border: 0px;
+    display: inline-flex;
     align-items: center;
 }
 .play_pause{
-    display: none;
-    background-size: 50px 100px;
+    background-size: 50px 50px;
     background-repeat: space;
-    background-color: grey;
+}
+.add_to_playlist{
+    width: 50px;
+    height: 50px;
+    background: black;
+}
+.btns{
+    display: none;
 }
 audio, source{
     display: none;
@@ -124,15 +131,22 @@ audio, source{
 #info{
     width:300px;
 }
-#length {
+#length#length {
     position: absolute;
     width: 200px;
     height:5px;
     background: lightgreen;
+    top:-10px;
+    left:50%;
+    margin-left:-100px;
 }
-#progress{
+#progress#progress{
     position: absolute;
-    width: 10px;
+    width: 0px;
     height: 5px;
     background: green;
+    top:-10px;
+    left:50%;
+    margin-left:-100px;
+    
 }

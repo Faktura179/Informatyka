@@ -28,6 +28,9 @@ class Ui {
             //console.log($("#audio").prop("currentTime"),$("#audio").prop("duration"))
             var currTime=Math.floor(Math.floor( $("#audio").prop("currentTime"))/60)+":"+(Math.floor( $("#audio").prop("currentTime"))%60)
             var durr=Math.floor(Math.floor($("#audio").prop("duration"))/60)+":"+(Math.floor( $("#audio").prop("duration"))%60)
+            var percent = ($("#audio").prop("currentTime")/$("#audio").prop("duration"))*100
+            console.log(percent)
+            $("#progress").css("width",percent*2)
             $("#time").text(currTime+"/"+durr)
         })
     }
@@ -63,7 +66,7 @@ class Ui {
                 console.log(music.currentSong, music.songs.length)
                 $("#info").text(this.childNodes[0].innerText+"/ "+this.childNodes[1].innerText);
                 this.style.backgroundColor="blue"
-                this.childNodes[3].style.display="block"
+                this.childNodes[3].style.display="inline-flex"
                 $(".play_pause").toArray().forEach((el)=>{
                     el.style.backgroundImage="url(/obrazki/pause.png)"
                 })
@@ -93,11 +96,12 @@ class Ui {
     songs(songs,album){
         var container = document.getElementById("songs")
         $(container).empty()
+        music.songs=[]
         songs.forEach(el=>{
             var song = new Song(el,album)
+            music.songs.push(song)
             container.append(song.createElement())
         })
-        music.songs=songs
         this.songClick()
     }
 
