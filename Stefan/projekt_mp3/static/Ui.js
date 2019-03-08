@@ -36,50 +36,11 @@ class Ui {
         $("#playlist").click(function(e){
             net.getPlaylist()
         })
-    }
-
-    albums(albums){
-        var container = document.getElementById("albums")
-        albums.forEach(el => {
-            var img = document.createElement("img")
-            img.src="/mp3/"+el+"/Cover.jpg"
-            img.classList.add("img")
-            container.append(img)
-        });
-    }
-
-    songClick(){
-        $(".song").toArray().forEach((el,index)=>{
-            let i = index
-            $(el).on("mouseover",function(e){
-                this.style.backgroundColor="blue"
-            })
-            $(el).on("mouseout",function(e){
-                if(!music.song.isSameNode(this))
-                    this.style.backgroundColor="white"
-            })
-            $(el).on("click",function(e){
-                $("#audio_src")[0].src="/mp3/"+this.childNodes[0].innerText+"/"+this.childNodes[1].innerText
-                music.load()
-                music.song.style.backgroundColor="white"
-                if(music.song.childNodes.length>3)
-                    music.song.childNodes[3].style.display="none"
-                music.song=this
-                music.currentSong=i
-                console.log(music.currentSong, music.songs.length)
-                $("#info").text(this.childNodes[0].innerText+"/ "+this.childNodes[1].innerText);
-                this.style.backgroundColor="blue"
-                this.childNodes[3].style.display="inline-flex"
-                $(".play_pause").toArray().forEach((el)=>{
-                    el.style.backgroundImage="url(/obrazki/pause.png)"
-                })
-            })
-        })
         $(".play_pause").toArray().forEach((el)=>{
             $(el).off("click")
             $(el).on("click",function(e){
                 e.stopPropagation()
-                console.log(music.isPlaying)
+                //console.log(music.isPlaying)
                 if(music.isPlaying){
                     music.pause()
                     $(".play_pause").toArray().forEach((el)=>{
@@ -96,16 +57,28 @@ class Ui {
         })
     }
 
+    albums(albums){
+        var container = document.getElementById("albums")
+        albums.forEach(el => {
+            var img = document.createElement("img")
+            img.src="/mp3/"+el+"/Cover.jpg"
+            img.classList.add("img")
+            container.append(img)
+        });
+    }
+
+    songClick(){
+    }
+
     playlist(items){
         var container = document.getElementById("songs")
         $(container).empty()
         music.songs=[]
-        items.forEach(el=>{
-            var song = new Song(el.song,el.album)
+        items.forEach((el,index)=>{
+            var song = new Song(el.song,el.album,index)
             music.songs.push(song)
-            container.append(song.createElement())
+            container.append(song.htmlElement)
         })
-        this.songClick()
     }
 
 }
