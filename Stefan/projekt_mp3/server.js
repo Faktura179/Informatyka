@@ -13,6 +13,7 @@ var fs = require("fs")
 //     //console.log(static)
 // })
 var albums=[]
+var playlist=[]
 fs.readdir(__dirname+"/static/mp3",function(err,files){
     if(err){
         return console.log(err)
@@ -81,6 +82,17 @@ function servResponse(req,res) {
                 res.end(JSON.stringify(finish))
                 //console.log(finish)
             })
+        }else if(req.url=="/add"){
+            var item ={}
+            item.album = finish.album
+            item.song = finish.song
+            playlist.push(item)
+            console.log(item)
+            res.writeHead(200, { "content-type": extensions["txt"] })
+            res.end("{}")
+        }else if(req.url=="/playlist"){
+            res.writeHead(200, { "content-type": extensions["txt"] })
+            res.end(JSON.stringify(playlist))
         }
     })
 }

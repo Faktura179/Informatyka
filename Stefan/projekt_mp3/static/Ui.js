@@ -29,9 +29,12 @@ class Ui {
             var currTime=Math.floor(Math.floor( $("#audio").prop("currentTime"))/60)+":"+(Math.floor( $("#audio").prop("currentTime"))%60)
             var durr=Math.floor(Math.floor($("#audio").prop("duration"))/60)+":"+(Math.floor( $("#audio").prop("duration"))%60)
             var percent = ($("#audio").prop("currentTime")/$("#audio").prop("duration"))*100
-            console.log(percent)
+            //console.log(percent)
             $("#progress").css("width",percent*2)
             $("#time").text(currTime+"/"+durr)
+        })
+        $("#playlist").click(function(e){
+            net.getPlaylist()
         })
     }
 
@@ -99,6 +102,17 @@ class Ui {
         music.songs=[]
         songs.forEach(el=>{
             var song = new Song(el,album)
+            music.songs.push(song)
+            container.append(song.createElement())
+        })
+        this.songClick()
+    }
+    playlist(items){
+        var container = document.getElementById("songs")
+        $(container).empty()
+        music.songs=[]
+        items.forEach(el=>{
+            var song = new Song(el.song,el.album)
             music.songs.push(song)
             container.append(song.createElement())
         })

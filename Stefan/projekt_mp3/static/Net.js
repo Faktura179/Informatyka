@@ -53,4 +53,39 @@ class Net {
             },
         });
     }
+    addToPlaylist(song,album){
+        $.ajax({
+            url: "/add",
+            data: { album:album,song:song },
+            type: "POST",
+            success: function (data) {
+                //czytamy odesłane z serwera dane
+                var obj = JSON.parse(data)
+        
+                
+        
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+            },
+        });
+    }
+    getPlaylist(){
+        $.ajax({
+            url: "/playlist",
+            data: { },
+            type: "POST",
+            success: function (data) {
+                //czytamy odesłane z serwera dane
+                var obj = JSON.parse(data)
+                
+               //console.log(obj)
+                ui.playlist(obj)
+        
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+            },
+        });
+    }
 }

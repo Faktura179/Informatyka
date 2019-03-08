@@ -4,7 +4,7 @@ class Song{
         this.album=album
         this.size=size
         this.htmlElement
-    }
+    } 
     createElement(){
         var div = document.createElement("div")
         div.classList.add("song")
@@ -26,6 +26,7 @@ class Song{
         controls.style.height="50px"
         controls.classList.add("play_pause")
         playlist.classList.add("add_to_playlist")
+        playlist.onclick=this.addToPlaylist.bind(this)
         buttons.classList.add("btns")
         buttons.append(controls)
         buttons.append(playlist)
@@ -36,5 +37,18 @@ class Song{
         this.htmlElement=div
         
         return div
+    }
+    click(){
+
+    }
+    mouseOver(){
+
+    }
+    mouseOut(){
+        
+    }
+    addToPlaylist(){
+        console.log(this.name,this.album)
+        net.addToPlaylist(this.name,this.album)
     }
 }
