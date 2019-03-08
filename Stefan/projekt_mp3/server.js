@@ -62,7 +62,7 @@ function servResponse(req,res) {
                 }
                 files.forEach(el=>{
                     if(el.split(".")[el.split(".").length-1]=="mp3")
-                    finish.songs.push(el)
+                    finish.songs.push({song:el,album:albums[0]})
                 })
                 res.writeHead(200, { "content-type": extensions["txt"] })
                 res.end(JSON.stringify(finish))
@@ -76,7 +76,7 @@ function servResponse(req,res) {
                 }
                 files.forEach(el=>{
                     if(el.split(".")[el.split(".").length-1]=="mp3")
-                    finish.songs.push(el)
+                    finish.songs.push({song:el,album:finish.album})
                 })
                 res.writeHead(200, { "content-type": extensions["txt"] })
                 res.end(JSON.stringify(finish))

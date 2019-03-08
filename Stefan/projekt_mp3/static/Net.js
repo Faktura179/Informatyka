@@ -20,10 +20,8 @@ class Net {
                 //czytamy odesłane z serwera dane
                 var obj = JSON.parse(data)
                 net.albums=obj.albums
-                //alert(JSON.stringify(obj))
                 ui.albums(obj.albums)
-                //tu wypisz sumę w div-ie na stronie
-                ui.songs(obj.songs,obj.album)
+                ui.playlist(obj.songs)
         
             },
             error: function (xhr, status, error) {
@@ -41,11 +39,8 @@ class Net {
             success: function (data) {
                 //czytamy odesłane z serwera dane
                 var obj = JSON.parse(data)
-        
-                //alert(JSON.stringify(obj))
-        
-                //tu wypisz sumę w div-ie na stronie
-                ui.songs(obj.songs,obj.album)
+
+                ui.playlist(obj.songs)
         
             },
             error: function (xhr, status, error) {

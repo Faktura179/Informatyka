@@ -96,17 +96,6 @@ class Ui {
         })
     }
 
-    songs(songs,album){
-        var container = document.getElementById("songs")
-        $(container).empty()
-        music.songs=[]
-        songs.forEach(el=>{
-            var song = new Song(el,album)
-            music.songs.push(song)
-            container.append(song.createElement())
-        })
-        this.songClick()
-    }
     playlist(items){
         var container = document.getElementById("songs")
         $(container).empty()
