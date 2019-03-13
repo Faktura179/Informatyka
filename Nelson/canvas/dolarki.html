@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function rand(){
+            var rand = Math.round(Math.random()*2-1)
+            while(rand==0){
+                rand = Math.round(Math.random()*2-1)
+            }
+            return rand
+        }
+        class Dollar{
+            constructor(x,y,img){
+                this.x=x
+                this.y=y
+                this.img=imgs[img]
+                this.speed=Math.random()*6+0.1
+                this.moveX=rand()
+                this.moveY=rand()
+            }
+            draw(ctx){
+                //console.log(imgs[this.img])
+                ctx.drawImage(this.img,this.x,this.y,50,50)
+            }
+            move(){
+                if(this.x>=550 || this.x <= 0){
+                    this.moveX=-this.moveX
+                }
+                if(this.y<=0 || this.y>=250){
+                    this.moveY=-this.moveY
+                }
+                
+                this.x+=this.speed*this.moveX
+                this.y+=this.speed*this.moveY
+            }
+        }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        function load(){
+            loaded+=1
+        }
+        var loaded=0
+        var dollars =[]
+        var imgs = []
+        var img1= document.createElement("img")
+        var img2 =document.createElement("img")
+        var img3 =document.createElement("img")
+        img1.src="http://pngimg.com/uploads/dollar_sign/dollar_sign_PNG29.png"
+        img1.onload=load
+        img2.src="http://infoling.org/infoling2/img/colorful-stickers-part-2-icons-set/png/256x256/dollar_currency_sign.png"
+        img2.onload=load
+        img3.src="https://png2.kisspng.com/sh/1a2582575c61a619919fc5bdc90ced8c/L0KzQYm3V8I6N5J9epH0aYP2gLBuTfRwdJ1mip98aXfxPcPshL1kdJp1RdN7dD3pf8P0TgBieJZ3RadrNXW7RrW9WMI1bJY7RqU8OEW7QIK8UcU0Omo3SacAOEW2Q4i1kP5o/kisspng-dollar-sign-red-clip-art-form-paper-5b5e86d6824de6.3385801515329215585337.png"
+        img3.onload=load
+        imgs.push(img1)
+        imgs.push(img2)
+        imgs.push(img3)
+        document.addEventListener("DOMContentLoaded",async function(){
+            while(loaded<3){
+                await sleep(50)
+            }
+            var canvas = document.getElementById("canvas")
+            var ctx = canvas.getContext("2d")
+            setInterval(function(){
+                dollars.push(new Dollar(Math.round(Math.random()*550),Math.round(Math.random()*250),Math.floor( Math.random()*3)))
+                //console.log(dollars)
+            },2000)
+            setInterval(function(){
+                ctx.clearRect(0,0,600,300)
+                dollars.forEach(el=>{
+                    el.move()
+                    el.draw(ctx)
+                })
+            },30)
+        })
+    </script>
+    <style>
+        canvas{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="300"></canvas>
+</body>
+</html>

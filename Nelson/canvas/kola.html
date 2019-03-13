@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+            var canvas = document.getElementById("canvas")
+            var ctx = canvas.getContext("2d")
+
+            ctx.strokeStyle="rgba(255,0,255,0.1)"
+            ctx.lineWidth="6"
+            var a=setInterval(()=>{},1000000)
+            canvas.onmousemove=function(e){
+                clearInterval(a)
+                //console.log(e.clientX, e.clientY)
+                ctx.moveTo(e.clientX,e.clientY)
+                var angle = Math.random()
+                ctx.beginPath()
+                ctx.arc(e.clientX,e.clientY,50,angle*Math.PI*2,angle*Math.PI*2+0.25*Math.PI)
+                ctx.stroke()
+                a = setInterval(function(){
+                    var angle = Math.random()
+                    ctx.beginPath()
+                    ctx.arc(e.clientX,e.clientY,50,angle*Math.PI*2,angle*Math.PI*2+0.25*Math.PI)
+                    ctx.stroke()
+                },100)
+                
+            }
+            
+        })
+    </script>
+    <style>
+        *{
+            margin:0;
+            padding: 0;
+        }
+    canvas{
+        border:1px solid black;
+    }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+</body>
+</html>
