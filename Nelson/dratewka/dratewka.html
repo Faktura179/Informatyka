@@ -373,7 +373,7 @@
                     input.disabled=false
                     caret.style.display="inline"
                     callback()
-                },200)  
+                },1000)  
             }
         }
 
@@ -396,7 +396,7 @@
             var audio = document.getElementById("hejnal")
             audio.currentTime = 80
             audio.play();
-            setTimeout(()=>{div.style.display="none"; audio.pause()},1000)
+            setTimeout(()=>{div.style.display="none"; audio.pause()},15000)
             setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_A.jpg"},5000)
             setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_B.jpg"},10000)
 
