@@ -32,4 +32,8 @@ class Music{
             $(this.song.parentElement.childNodes[this.currentSong-1]).click();
         }
     }
+    getData(){
+
+    }
+    
 }
