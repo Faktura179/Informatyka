@@ -18,7 +18,7 @@ $(document).ready(function () {
     $("#root").append(renderer.domElement);
     camera.position.set(400, 400, 400)
     camera.lookAt(scene.position)
-    scene.add(new Hex3D())
+    scene.add(new Hex3D(0,1))
     function render() {
 
         requestAnimationFrame(render);
