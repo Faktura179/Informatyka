@@ -13,7 +13,9 @@ var id=0
 app.get("/",function(req,res){
     res.sendFile(path.join(__dirname + "/static/index.html"))
 })
-
+app.get("/hex",function(req,res){
+    res.redirect("/hex.html")
+})
 app.post("/map",function(req,res){
     level.push({level:req.body,id:id})
     id++

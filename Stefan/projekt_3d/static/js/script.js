@@ -46,12 +46,27 @@ class Hex{
         }else{
             this.dir++
         }
+        $("#json_pre").text(JSON.stringify({size:$("#sel").val(),level:getmap()},null,4))
         this.inside()
     }
 }
 var field=[]
 var type="wall"
+function getmap(){
+    var map=[]
+    var i =0
+    field.forEach((e)=>{
+        e.forEach(el=>{
+            if(el.dir!=null){
+                map.push({id:i,x:el.x,z:el.y,dirOut:el.dir,dirIn:(el.dir+3)%6,type:el.type})
+                i++
+            }
+        })
+    })
+    return map
+}
 $(document).ready(function(){
+    
     $("#sel").on("change",function(){
         var size = this.value
         field=[]
@@ -71,17 +86,9 @@ $(document).ready(function(){
     })
     $("#sel").trigger("change")
     $("#save").on("click",function(){
-        var map=[]
-        var i=0
-        field.forEach((e)=>{
-            e.forEach(el=>{
-                if(el.dir!=null){
-                    map.push({id:i,x:el.x,z:el.y,dirOut:el.dir,dirIn:(el.dir+3)%6,type:el.type})
-                    i++
-                }
-            })
-        })
-        net.sendData($("#sel").val(),map)
+        var map=getmap()
+        
+        net.sendData($("#sel").val(),map) 
     })
     $("#load").on("click",function(){
         net.getLevel(0)
@@ -97,5 +104,8 @@ $(document).ready(function(){
     })
     $("#light").on("click",function(){
         type="light"
+    })
+    $("#hex").click(function(){
+        location="/hex"
     })
 })
