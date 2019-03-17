@@ -45,7 +45,7 @@ class Music{
     }
     getData(){
         this.analyser.getByteFrequencyData(this.dataArray);
-        return this.dataArray.toString();
+        return this.dataArray;
     }
     
 }

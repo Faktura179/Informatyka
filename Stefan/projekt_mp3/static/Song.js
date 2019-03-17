@@ -45,6 +45,7 @@ class Song{
     click(){
         $("#audio_src")[0].src="/mp3/"+this.htmlElement.childNodes[0].innerText+"/"+this.htmlElement.childNodes[1].innerText
         music.load()
+        music.audioContext.resume()
         music.song.style.backgroundColor="white"
         if(music.song.childNodes.length>3)
             music.song.childNodes[3].style.display="none"

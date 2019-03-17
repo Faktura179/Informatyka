@@ -9,27 +9,34 @@ class Visual {
             10000    // maxymalna renderowana odległość od kamery 
         );
         var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColor(0x000000);
+        renderer.setClearColor(0xffffff);
         renderer.setSize($(window).width(), $(window).height());
         $("#root").append(renderer.domElement);
-        camera.position.set(0, 400, 0)
+        camera.position.set(0, 0, 800)
         camera.lookAt(scene.position)
-        var geometry = new THREE.BoxBufferGeometry( 50, 50, 50 );
-        var material = new THREE.MeshNormalMaterial()
-        var mesh = new THREE.Mesh( geometry, material );
-        scene.add(mesh)
+        this.cubes=[]
+        for(var i =0;i<music.getData().length;i++){
+            var geometry = new THREE.BoxBufferGeometry( 25, 1, 1 );
+            var material = new THREE.MeshNormalMaterial()
+            var mesh = new THREE.Mesh( geometry, material );
+            mesh.position.x=-800+i*50
+            scene.add(mesh)
+            this.cubes.push(mesh)
+            console.log("a")
+        }
 
         this.scene=scene
         this.camera=camera
         this.renderer=renderer
-        console.log(renderer)
-        console.log(this.renderer)
         this.render()
     }
 
     render() {
         requestAnimationFrame(this.render.bind(this)); // bind(this) przekazuje this do metody render
-        $("#anydiv").html(music.getData()) // wyświetlenie danych audio w div-ie
+        var arr = music.getData()
+        this.cubes.forEach((el,index)=>{
+            el.scale.y=arr[index]*2
+        })
         this.renderer.render(this.scene, this.camera);
     }
 
