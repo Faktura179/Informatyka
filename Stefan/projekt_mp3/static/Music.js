@@ -5,6 +5,17 @@ class Music{
         this.isPlaying=false  
         this.songs=[]
         this.currentSong=0  
+
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new AudioContext();
+        this.audioElement = document.getElementById("audio");
+        this.source = this.audioContext.createMediaElementSource(this.audioElement);
+        this.analyser = this.audioContext.createAnalyser();
+        this.source.connect(this.analyser);
+        this.analyser.connect(this.audioContext.destination);
+        this.analyser.fftSize = 64;
+        this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+        this.analyser.getByteFrequencyData(this.dataArray);
     }
 
     load(){
@@ -33,7 +44,8 @@ class Music{
         }
     }
     getData(){
-
+        this.analyser.getByteFrequencyData(this.dataArray);
+        return this.dataArray.toString();
     }
     
 }

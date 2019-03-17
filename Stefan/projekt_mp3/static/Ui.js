@@ -55,6 +55,12 @@ class Ui {
                 }
             })
         })
+        $("#visual").click(function(e){
+            $("#root").css("display","block")
+        })
+        $("#normal").click(function(e){
+            $("#root").css("display","none")
+        })
     }
 
     albums(albums){
