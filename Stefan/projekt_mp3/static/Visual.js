@@ -23,6 +23,15 @@ class Visual {
         //this.render()
         this.animationFrame=null
         window.onresize=this.resize.bind(this)
+
+
+        // var rendererStats	= new THREEx.RendererStats()
+        // rendererStats.domElement.style.position	= 'absolute'
+        // rendererStats.domElement.style.left	= '0px'
+        // rendererStats.domElement.style.bottom	= '0px'
+        // document.body.appendChild( rendererStats.domElement )
+        // this.rendererStats=rendererStats
+        
     }
 
     render() {
@@ -40,7 +49,7 @@ class Visual {
         this.points.push(new THREE.Vector3(810,0,0))
 
         var curve = new THREE.CatmullRomCurve3(this.points)
-        var points = curve.getPoints( 5000 );
+        var points = curve.getPoints( 1000 );
         var geometry = new THREE.BufferGeometry().setFromPoints( points );
 
         var material = new THREE.LineBasicMaterial( { color : 0xff0000, linewidth: 3} );
@@ -52,7 +61,13 @@ class Visual {
 
         this.renderer.render(this.scene, this.camera);
         this.scene.remove(curveObject)
+        curveObject.geometry.dispose()
+        curveObject.material.dispose()
+        curveObject=undefined
         this.points=[]
+
+
+        //this.rendererStats.update(this.renderer);
     }
 
     resize(){
