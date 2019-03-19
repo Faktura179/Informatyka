@@ -57,9 +57,11 @@ class Ui {
         })
         $("#visual").click(function(e){
             $("#root").css("display","block")
+            visual.render()
         })
         $("#normal").click(function(e){
             $("#root").css("display","none")
+            cancelAnimationFrame(visual.animationFrame)
         })
     }
 
