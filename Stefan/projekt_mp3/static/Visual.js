@@ -24,6 +24,8 @@ class Visual {
         this.animationFrame=null
         window.onresize=this.resize.bind(this)
 
+        this.material = new THREE.LineBasicMaterial( { color : 0xff0000, linewidth: 3} );
+
 
         // var rendererStats	= new THREEx.RendererStats()
         // rendererStats.domElement.style.position	= 'absolute'
@@ -52,17 +54,17 @@ class Visual {
         var points = curve.getPoints( 1000 );
         var geometry = new THREE.BufferGeometry().setFromPoints( points );
 
-        var material = new THREE.LineBasicMaterial( { color : 0xff0000, linewidth: 3} );
+        
 
         // Create the final object to add to the scene
-        var curveObject = new THREE.Line( geometry, material );
+        var curveObject = new THREE.Line( geometry, this.material );
         this.scene.add(curveObject)
 
 
         this.renderer.render(this.scene, this.camera);
         this.scene.remove(curveObject)
         curveObject.geometry.dispose()
-        curveObject.material.dispose()
+        //curveObject.material.dispose()
         curveObject=undefined
         this.points=[]
 
