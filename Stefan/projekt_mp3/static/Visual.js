@@ -24,7 +24,7 @@ class Visual {
         this.animationFrame=null
         window.onresize=this.resize.bind(this)
 
-        this.material = new THREE.LineBasicMaterial( { color : 0xff0000, linewidth: 3} );
+        
 
 
         // var rendererStats	= new THREEx.RendererStats()
@@ -39,33 +39,45 @@ class Visual {
     render() {
         this.animationFrame = requestAnimationFrame(this.render.bind(this)); // bind(this) przekazuje this do metody render
         var arr = music.getData()
-        
-        this.points.push(new THREE.Vector3(-810,0,0))
+        var points=[]
+       // this.points.push(new THREE.Vector3(-810,0,0))
         for(var i =0;i<arr.length;i++){
-            this.points.push(new THREE.Vector3(-800+i*50,0,0))
-            this.points.push(new THREE.Vector3(-790+i*50,arr[i]*2,0))
+            points.push(new THREE.Vector3(-1400+i*90,0,0))
+            points.push(new THREE.Vector3(-1370+i*90,arr[i]*2,0))
             //this.points.push(new THREE.Vector3(-780+i*50,0,0))
-            this.points.push(new THREE.Vector3(-770+i*50,-arr[i]*2,0))
-            //this.points.push(new THREE.Vector3(-760+i*50,0,0))
+            points.push(new THREE.Vector3(-1340+i*90,-arr[i]*2,0))
+            points.push(new THREE.Vector3(-1310+i*90,0,0))
+            var curve = new THREE.CatmullRomCurve3(points)
+            var points = curve.getPoints( 50 );
+            var geometry = new THREE.BufferGeometry().setFromPoints( points );
+            var g = 255-arr[i]
+            if(g<16)
+            g=17
+            var color=parseInt("ff"+g.toString(16)+"00",16)
+            var material = new THREE.LineBasicMaterial( { color : color, linewidth: 3} );
+            var curveObject = new THREE.Line( geometry, material );
+            this.scene.add(curveObject)
+            this.points.push(curveObject)
+            points=[]
         }
-        this.points.push(new THREE.Vector3(810,0,0))
+        //this.points.push(new THREE.Vector3(810,0,0))
 
-        var curve = new THREE.CatmullRomCurve3(this.points)
-        var points = curve.getPoints( 1000 );
-        var geometry = new THREE.BufferGeometry().setFromPoints( points );
+        
 
         
 
         // Create the final object to add to the scene
-        var curveObject = new THREE.Line( geometry, this.material );
-        this.scene.add(curveObject)
+        
 
 
         this.renderer.render(this.scene, this.camera);
-        this.scene.remove(curveObject)
-        curveObject.geometry.dispose()
-        //curveObject.material.dispose()
-        curveObject=undefined
+        this.points.forEach(el=>{
+            this.scene.remove(el)
+            el.geometry.dispose()
+            el.material.dispose()
+            el=undefined
+        })
+        
         this.points=[]
 
 
