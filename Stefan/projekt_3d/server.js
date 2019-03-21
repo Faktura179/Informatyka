@@ -16,6 +16,9 @@ app.get("/",function(req,res){
 app.get("/hex",function(req,res){
     res.redirect("/hex.html")
 })
+app.get("/game", function(req,res){
+    res.redirect("/game.html")
+})
 app.post("/map",function(req,res){
     level.push({level:req.body,id:id})
     id++

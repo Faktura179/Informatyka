@@ -108,4 +108,7 @@ $(document).ready(function(){
     $("#hex").click(function(){
         location="/hex"
     })
+    $("#game").click(function(){
+        location="/game"
+    })
 })
