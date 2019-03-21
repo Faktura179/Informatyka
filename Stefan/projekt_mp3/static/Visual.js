@@ -40,6 +40,7 @@ class Visual {
         this.animationFrame = requestAnimationFrame(this.render.bind(this)); // bind(this) przekazuje this do metody render
         var arr = music.getData()
         var points=[]
+        var background =0
        // this.points.push(new THREE.Vector3(-810,0,0))
         for(var i =0;i<arr.length;i++){
             points.push(new THREE.Vector3(-1400+i*90,0,0))
@@ -59,12 +60,17 @@ class Visual {
             this.scene.add(curveObject)
             this.points.push(curveObject)
             points=[]
+            if(i>arr.length-(arr.length/4))
+                background+=arr[i]
         }
         //this.points.push(new THREE.Vector3(810,0,0))
 
         
-
-        
+        background/=arr.length/4
+        background=Math.round(background)
+        if(background<16)
+        background=17
+        this.scene.background= new THREE.Color(parseInt(background.toString(16)+"00ff",16))
 
         // Create the final object to add to the scene
         

@@ -1,5 +1,5 @@
 var Settings = {
 
-    hexRadius: 1000,
+    hexRadius: 100,
     wallMaterial: new THREE.MeshNormalMaterial(),
 }
