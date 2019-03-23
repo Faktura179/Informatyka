@@ -13,6 +13,8 @@ var extensions={
     png:"image/png",
 }
 
+var users=[]
+
 function servResponse(req,res) {
     var allData = "";
 
@@ -22,15 +24,16 @@ function servResponse(req,res) {
 
     req.on("end", function (data) {
         var finishObj = qs.parse(allData)
-             
-        switch (finishObj.akcja) {
+        res.writeHead(200, { "content-type": extensions["json"]})
+        switch (finishObj.action) {
            //dodanie nowego usera
            case "ADD_USER":
-              addUser();
+              var obj = addUser(finishObj.user);
+              res.end(JSON.stringify(obj))
               break;
            //inna akcja
-           case "":
-              
+           case "RESET":
+                users=[]
               break;            
           }
      })
@@ -91,6 +94,23 @@ server.listen(3000, function () {
 
 //funkcje
 
-function addUser(){
-    
+function addUser(user){
+    var obj={success:true}
+    if(users.length==2){
+        obj.success=false
+        obj.error="TOO_MANY_USERS"
+        return obj
+    }
+    var exists=false
+    users.forEach(el=>{
+        if(el==user) exists=true
+    })
+    if(exists){
+        obj.success=false
+        obj.error="USER_EXISTS"
+    }else{
+        users.push(user)
+        obj.player=users.length
+    }
+    return obj
 }
