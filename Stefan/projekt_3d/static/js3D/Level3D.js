@@ -20,7 +20,7 @@ class Level3D{
         console.log(result)
         var container = new THREE.Object3D()
         result.level.level.forEach(element => {
-            var hex = new Hex3D(-1,element.dirOut)
+            var hex = new Hex3D([element.dirOut])
             hex.position.x=Settings.hexRadius*element.x*2/Math.sqrt(3)+(Settings.hexRadius*element.x/Math.sqrt(3))
             hex.position.z=Settings.hexRadius*element.z*2 + ((element.x%2)*Settings.hexRadius)
             hex.rotation.y=Math.PI/2
