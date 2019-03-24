@@ -30,6 +30,10 @@ app.post("/load",function(req,res){
     res.send(level[req.body.id])
 })
 
+app.post("/levels",function(req,res){
+    res.send({levels:level.length})
+})
+
 app.listen(PORT, function () { 
     console.log("start serwera na porcie " + PORT )
 })

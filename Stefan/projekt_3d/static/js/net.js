@@ -37,4 +37,23 @@ class Net{
             }
             }) 
     }
+    getNumLevels(){
+        $.ajax({
+            url:"/levels",
+            data:{},
+            type:"POST",
+            success:function(data){
+                $("#num_planszy").empty()
+                for(var i=0;i<data.levels;i++){
+                    var option=document.createElement("option")
+                    option.innerText=i
+                    option.value=i
+                    $("#num_planszy").append(option)
+                }
+            },
+            error:function(){
+            
+            }
+            })
+    }
 }

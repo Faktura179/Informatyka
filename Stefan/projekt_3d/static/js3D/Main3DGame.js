@@ -2,6 +2,7 @@ var level
 var item
 var light
 var ui
+var net
 $(document).ready(function () {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -26,9 +27,11 @@ $(document).ready(function () {
     level=new Level3D(scene)
     item=new Item()
     light= new Light()
+    net=new Net()
     ui= new Ui()
+    
 
-    scene.add(level.getContainer())
+    //scene.add(level.getContainer())
 
     function render() {
 

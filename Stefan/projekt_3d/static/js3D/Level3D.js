@@ -1,10 +1,16 @@
 class Level3D{
     constructor(scene){
+        this.scene=scene
+    }
+    getContainer(){
+        return this.container
+    }
+    createMap(id){
         var result
         $.ajax({url:"/load",
-        data:{id:0},
-        type:"POST",
+        data:{id:id},
         async:false,
+        type:"POST",
         success:function(data){
             result=data
         },
@@ -21,9 +27,7 @@ class Level3D{
             container.add(hex)
         });
         this.container=container
-    }
-    getContainer(){
-        return this.container
+        this.scene.add(container)
     }
 
 }

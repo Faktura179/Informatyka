@@ -91,7 +91,13 @@ $(document).ready(function(){
         net.sendData($("#sel").val(),map) 
     })
     $("#load").on("click",function(){
-        net.getLevel(0)
+        //net.getLevel(0)
+        net.getNumLevels()
+        $("#load_number").css("display","block")
+    })
+    $("#send").click(function(){
+        net.getLevel($("#num_planszy").val())
+        $("#load_number").css("display","none")
     })
     $("#walls").on("click",function(){
         type="wall"
