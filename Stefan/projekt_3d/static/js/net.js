@@ -26,7 +26,8 @@ class Net{
                 $("#sel").trigger("change")
                 data.level.level.forEach(element => {
                     var hex =field[element.z][element.x]
-                    hex.dir=element.dirOut
+                    hex.dir=parseInt(element.dirOut)
+                    hex.dirIn=element.dirIn
                     hex.type=element.type
                     hex.inside()
                     

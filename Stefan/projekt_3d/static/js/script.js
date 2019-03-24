@@ -8,6 +8,7 @@ class Hex{
         this.htmlElement.css("background-image","url('gfx/hexagon.png')")
         this.htmlElement.addClass("hexagon")
         this.dir=null
+        this.dirIn=[]
         this.htmlElement.on("click",function(){
             this.click()
         }.bind(this)) 
@@ -58,7 +59,7 @@ function getmap(){
     field.forEach((e)=>{
         e.forEach(el=>{
             if(el.dir!=null){
-                map.push({id:i,x:el.x,z:el.y,dirOut:el.dir,dirIn:(el.dir+3)%6,type:el.type})
+                map.push({id:i,x:el.x,z:el.y,dirOut:el.dir,dirIn:el.dirIn,type:el.type})
                 i++
             }
         })
@@ -86,6 +87,59 @@ $(document).ready(function(){
     })
     $("#sel").trigger("change")
     $("#save").on("click",function(){
+        field.forEach((e)=>{
+            e.forEach(el=>{
+                el.dirIn=[]
+            })
+        })
+        field.forEach((e)=>{
+            e.forEach(el=>{
+                if(el.dir!=null){
+                    var x
+                    var y
+                    switch (el.dir) {
+                        case 0:
+                            x=0
+                            y=-1
+                            break;
+                        case 1:
+                            if(el.x%2==1){
+                                x=1
+                                y=0
+                            }else{
+                                x=1
+                                y=-1
+                            }
+                            break;
+                        case 2:
+                            if(el.x%2==1){
+                                x=1
+                                y=1
+                            }else{
+                                x=1
+                                y=0
+                            }
+                            break;
+                        case 3:
+                            x=0
+                            y=1
+                            break;
+                        case 4:
+                            x=-1
+                            if(el.x%2==1) y=1; else y=0
+                            break;
+                        case 5:
+                            x=-1
+                            if(el.x%2==1) y=0; else y=-1
+                            break;
+                    }
+                    if(field[el.y+y]!=undefined)
+                        if(field[el.y+y][el.x+x]!=undefined){
+                            field[el.y+y][el.x+x].dirIn.push((el.dir+3)%6)
+                        }
+                }
+            })
+        })
         var map=getmap()
         
         net.sendData($("#sel").val(),map) 
