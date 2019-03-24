@@ -1,4 +1,7 @@
 var level
+var item
+var light
+var ui
 $(document).ready(function () {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -17,10 +20,15 @@ $(document).ready(function () {
     var axes = new THREE.AxesHelper(1000)
     scene.add(axes)
     $("#root").append(renderer.domElement);
-    camera.position.set(400, 400, 400)
+    camera.position.set(0, 400, 400)
     camera.lookAt(scene.position)
 
     level=new Level3D(scene)
+    item=new Item()
+    light= new Light()
+    ui= new Ui()
+
+    scene.add(level.getContainer())
 
     function render() {
 
