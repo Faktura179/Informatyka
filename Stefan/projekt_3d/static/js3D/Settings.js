@@ -1,5 +1,5 @@
 var Settings = {
 
     hexRadius: 100,
-    wallMaterial: new THREE.MeshNormalMaterial(),
+    wallMaterial: new THREE.MeshPhongMaterial({color:0xff0000}),
 }

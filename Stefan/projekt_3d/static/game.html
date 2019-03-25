@@ -23,10 +23,21 @@
             margin:0;
             padding:0;
         }
+        #power{
+            position: absolute;
+            top:10px;
+            left:10px;
+        }
+        #height{
+            position: absolute;
+            top:30px;
+            left:10px;
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
     <div id="load_number"><div id="popup"><select name="num" id="num_planszy"></select><button id="send">OK</button></div></div>
+    <input type="range" name="power" id="power" min="0" max="100"><input type="range" name="height" id="height" min="10" max="400">
 </body>
 </html>
