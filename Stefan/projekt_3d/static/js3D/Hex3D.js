@@ -22,9 +22,17 @@ class Hex3D {
            side.position.x = Math.cos(Math.PI*i/3)*Settings.hexRadius
            side.position.z = Math.sin(Math.PI*i/3)*Settings.hexRadius 
            side.lookAt(container.position) // nakierowanie ścian na środek kontenera 3D  
+           side.castShadow=true
+           side.receiveShadow=true
            container.add(side)
         
        }   
+
+     var geometry = new THREE.CylinderGeometry( Settings.hexRadius*2/Math.sqrt(3), Settings.hexRadius*2/Math.sqrt(3), 1, 6 );
+     var cylinder = new THREE.Mesh( geometry, Settings.wallMaterial );
+     cylinder.position.y=-Settings.hexRadius/4
+     cylinder.receiveShadow=true
+     container.add( cylinder );
 
        return container
 

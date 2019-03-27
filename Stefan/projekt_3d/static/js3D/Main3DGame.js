@@ -14,6 +14,10 @@ $(document).ready(function () {
     var renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0xffffff);
     renderer.setSize($(window).width(), $(window).height());
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
     var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.addEventListener('change', function () {
         renderer.render(scene, camera)
@@ -29,12 +33,6 @@ $(document).ready(function () {
     light= new Light()
     net=new Net()
     ui= new Ui()
-    var geometry = new THREE.PlaneGeometry( 1000, 1000, 32 );
-    var material = new THREE.MeshPhongMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
-    var plane = new THREE.Mesh( geometry, material );
-    plane.position.y=-Settings.hexRadius/4 
-    plane.rotation.x=Math.PI/2
-    scene.add( plane );
 
     //scene.add(level.getContainer())
 
