@@ -9,12 +9,12 @@ class Ui{
             level.createMap($("#num_planszy").val())
             $("#load_number").css("display","none")
         })
-        $("#power").on("change",function(){
+        $("#power").on("input",function(){
             level.lights.forEach(el => {
                 el.power=this.value
             });
         })
-        $("#height").on("change",function(){
+        $("#height").on("input",function(){
             level.lights.forEach(el => {
                 el.position.y=this.value
             });

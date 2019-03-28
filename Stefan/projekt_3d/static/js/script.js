@@ -153,6 +153,9 @@ $(document).ready(function(){
         net.getLevel($("#num_planszy").val())
         $("#load_number").css("display","none")
     })
+    $("#test").click(function(){
+        location="/test/player.html"
+    })
     $("#walls").on("click",function(){
         type="wall"
     })
