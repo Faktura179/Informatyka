@@ -3,6 +3,8 @@ var mouse = new THREE.Vector2();
 var clickedVect = new THREE.Vector3(0,0,0); // wektor określający PUNKT kliknięcia
 var directionVect = new THREE.Vector3(0,0,0); // wektor określający KIERUNEK ruchu playera
 var player
+var sphere
+var mousedown=false
 
 
 $(document).ready(function () {
@@ -33,36 +35,69 @@ $(document).ready(function () {
     scene.add(floor.getContainer())
     player= new Player()
     scene.add(player.getPlayerCont())
+    var geometry = new THREE.SphereGeometry( 15, 32, 32 );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00, wireframe:true, transparent:true} );
+    sphere = new THREE.Mesh( geometry, material );
+    scene.add( sphere );
 
     //scene.add(level.getContainer())
 
     function render() {
         
         requestAnimationFrame(render);
+
+        if(mousedown){
+            // calculate mouse position in normalized device coordinates
+            // (-1 to +1) for both components
             
-        player.getPlayerCont().translateOnAxis(directionVect, 5)
+            raycaster.setFromCamera( mouse, camera );
+            var intersects = raycaster.intersectObjects( scene.children, true );
+            if (intersects.length > 0) {
+                clickedVect = intersects[0].point
+                console.log(clickedVect)
+                directionVect = clickedVect.clone().sub(player.getPlayerCont().position).normalize()
+                console.log(directionVect)
+                //funkcja normalize() przelicza współrzędne x,y,z wektora na zakres 0-1
+                //jest to wymagane przez kolejne funkcje	
+                var angle = Math.atan2(
+                    player.getPlayerCont().position.clone().x - clickedVect.x,
+                    player.getPlayerCont().position.clone().z - clickedVect.z
+                )
+                player.getPlayerMesh().rotation.y = angle
+                player.getAxes().rotation.y=angle
+                }
+                sphere.position.set(clickedVect.x,5,clickedVect.z)
+        }
+        directionVect.y=0
+        if(player.getPlayerCont().position.clone().distanceTo(clickedVect)>51){
+            
+            player.getPlayerCont().translateOnAxis(directionVect, 5)
+        }else{
+            player.getPlayerCont().translateOnAxis(directionVect, 0)
+        }
+                
+        camera.position.x = player.getPlayerCont().position.x
+        camera.position.z = player.getPlayerCont().position.z + 400
+        camera.position.y = player.getPlayerCont().position.y + 400
+        camera.lookAt(player.getPlayerCont().position)
         
         renderer.render(scene, camera);
     }
     $(document).mousedown(function (event) {
-
-        // calculate mouse position in normalized device coordinates
-        // (-1 to +1) for both components
-    
+        mousedown=true
+        $(document).on("mousemove")
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-        raycaster.setFromCamera( mouse, camera );
-        var intersects = raycaster.intersectObjects( scene.children, true );
-        if (intersects.length > 0) {
-            clickedVect = intersects[0].point
-            console.log(clickedVect)
-            directionVect = clickedVect.clone().sub(player.getPlayerCont().position).normalize()
-            console.log(directionVect)
-            //funkcja normalize() przelicza współrzędne x,y,z wektora na zakres 0-1
-            //jest to wymagane przez kolejne funkcje	
-            console.log(player.getPlayerCont().position.clone().distanceTo(clickedVect))
-            }
-    
+    })
+    $(document).on("mousemove",function(event){
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        
+    })
+    $(document).mouseup(function(){
+        mousedown=false
+        $(document).off("mousemove")
+        mouse = new THREE.Vector2()
     })
     render();
 })

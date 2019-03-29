@@ -1,7 +1,7 @@
 class Plane{
     constructor(){
         var container= new THREE.Object3D()
-        var geometry = new THREE.PlaneGeometry( 1000, 1000, 8,8 );
+        var geometry = new THREE.PlaneGeometry( 3000, 3000, 24,24 );
         var material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide, wireframe:true} );
         var plane = new THREE.Mesh( geometry, material );
         var plane2 = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color:0xcccccc,side:THREE.DoubleSide}))
