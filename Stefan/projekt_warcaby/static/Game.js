@@ -19,7 +19,7 @@ class BlackTile{
 class WhitePiece{
     constructor(){
         var geometry = new THREE.CylinderGeometry(40,40,20,40)
-        var mesh = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color:0xffffff})
+        var mesh = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("img/white_pawn.jpg")})
         var cylinder = new THREE.Mesh(geometry, mesh)
         return cylinder
     }
@@ -27,7 +27,7 @@ class WhitePiece{
 class BlackPiece{
     constructor(){
         var geometry = new THREE.CylinderGeometry(40,40,20,40)
-        var mesh = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, color:0xff0000})
+        var mesh = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: new THREE.TextureLoader().load("img/red_pawn.jpg")})
         var cylinder = new THREE.Mesh(geometry, mesh)
         return cylinder
     }

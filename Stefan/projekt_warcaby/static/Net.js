@@ -2,9 +2,31 @@ class Net{
     constructor(){
         this.name=null
         this.player=null
+        this.interval
     }
-
+    wait(){
+        var that = this
+        $.ajax({
+            url:"/",
+            data: {
+                action: "WAIT",              
+            },
+            type:"POST",
+            success:function(data){
+                if(data.users.length==2){
+                    $("#window").css("display","none")
+                    if(that.player==1)
+                        $("#status").text("Witaj "+ that.name + "! Grasz bialymi. Dolaczyl gracz "+data.users[1])
+                    clearInterval(that.interval)
+                }
+            },
+            error:function(){
+                console.log("Error")
+            }
+            }) 
+    }
     login(user){
+        var that = this
         $.ajax({
             url:"/",
             data: {
@@ -13,13 +35,11 @@ class Net{
             },
             type:"POST",
             success:function(data){
-                console.log(data)
                 if(data.success){
-                    $("#window").css("display","none")
-                    
-                    console.log(data)
-                    this.name=user
-                    this.player=data.player
+                    $("#login").css("display","none")
+                    $("#waiting").css("display","block")
+                    that.name=user
+                    that.player=data.player
                     game.setPieces()
                     if(data.player==2){
                         game.camera.position.set(0,320,-520)
@@ -28,9 +48,11 @@ class Net{
                     }else{
                         $("#status").text("Witaj "+ user + "! Grasz bialymi")
                     }
+                    that.interval=setInterval(that.wait.bind(that),500)
                 }else{
                     $("#status").text(data.error)
                 }
+                
             },
             error:function(){
                 console.log("Error")
@@ -52,4 +74,5 @@ class Net{
             }
             }) 
     }
+    
 }

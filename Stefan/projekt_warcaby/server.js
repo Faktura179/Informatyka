@@ -34,7 +34,10 @@ function servResponse(req,res) {
            //inna akcja
            case "RESET":
                 users=[]
-              break;            
+              break;    
+            case "WAIT":
+                res.end(JSON.stringify({users:users}))
+                break;
           }
      })
 }
