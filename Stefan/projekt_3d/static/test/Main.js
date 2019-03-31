@@ -5,6 +5,7 @@ var directionVect = new THREE.Vector3(0,0,0); // wektor określający KIERUNEK r
 var player
 var sphere
 var mousedown=false
+var clock = new THREE.Clock();
 
 
 $(document).ready(function () {
@@ -22,10 +23,10 @@ $(document).ready(function () {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
-    orbitControl.addEventListener('change', function () {
-        renderer.render(scene, camera)
-    });
+    // var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+    // orbitControl.addEventListener('change', function () {
+    //     renderer.render(scene, camera)
+    // });
     var axes = new THREE.AxesHelper(1000)
     scene.add(axes)
     $("#root").append(renderer.domElement);
@@ -45,18 +46,14 @@ $(document).ready(function () {
     function render() {
         
         requestAnimationFrame(render);
-
-        if(mousedown){
-            // calculate mouse position in normalized device coordinates
-            // (-1 to +1) for both components
-            
-            raycaster.setFromCamera( mouse, camera );
-            var intersects = raycaster.intersectObjects( scene.children, true );
-            if (intersects.length > 0) {
+        var delta = clock.getDelta();
+        
+        raycaster.setFromCamera( mouse, camera );
+        var intersects = raycaster.intersectObjects( scene.children, true );
+        if (intersects.length > 0) {
+            if(mousedown){
                 clickedVect = intersects[0].point
-                console.log(clickedVect)
                 directionVect = clickedVect.clone().sub(player.getPlayerCont().position).normalize()
-                console.log(directionVect)
                 //funkcja normalize() przelicza współrzędne x,y,z wektora na zakres 0-1
                 //jest to wymagane przez kolejne funkcje	
                 var angle = Math.atan2(
@@ -65,15 +62,20 @@ $(document).ready(function () {
                 )
                 player.getPlayerMesh().rotation.y = angle
                 player.getAxes().rotation.y=angle
-                }
                 sphere.position.set(clickedVect.x,5,clickedVect.z)
+            }
         }
+        
+        player.player.updateModel(delta)
+
         directionVect.y=0
         if(player.getPlayerCont().position.clone().distanceTo(clickedVect)>51){
             
             player.getPlayerCont().translateOnAxis(directionVect, 5)
+            player.player.setAnimation()
         }else{
             player.getPlayerCont().translateOnAxis(directionVect, 0)
+            player.player.stopAnimation()
         }
                 
         camera.position.x = player.getPlayerCont().position.x
@@ -85,9 +87,6 @@ $(document).ready(function () {
     }
     $(document).mousedown(function (event) {
         mousedown=true
-        $(document).on("mousemove")
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     })
     $(document).on("mousemove",function(event){
         mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -96,8 +95,6 @@ $(document).ready(function () {
     })
     $(document).mouseup(function(){
         mousedown=false
-        $(document).off("mousemove")
-        mouse = new THREE.Vector2()
     })
     render();
 })

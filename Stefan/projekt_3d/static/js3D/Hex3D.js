@@ -29,7 +29,7 @@ class Hex3D {
        }   
 
      var geometry = new THREE.CylinderGeometry( Settings.hexRadius*2/Math.sqrt(3), Settings.hexRadius*2/Math.sqrt(3), 1, 6 );
-     var cylinder = new THREE.Mesh( geometry, Settings.wallMaterial );
+     var cylinder = new THREE.Mesh( geometry, Settings.floorMaterial );
      cylinder.position.y=-Settings.hexRadius/4
      cylinder.receiveShadow=true
      container.add( cylinder );

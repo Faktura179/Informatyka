@@ -38,6 +38,7 @@ $(document).ready(function () {
         //
 
         scene.add(meshModel);
+        
         console.log(geometry.animations)
         for (var i = 0; i < geometry.animations.length; i++) {
             // console.log(geometry.animations[i].name);
