@@ -8,7 +8,7 @@ class Model{
     loadModel(url, callback){
         var material = new THREE.MeshBasicMaterial(
             {
-                map: new THREE.TextureLoader().load("/mats/tucow_model.png"),
+                map: new THREE.TextureLoader().load("/mats/tucow_model1.png"),
                 morphTargets: true // ta własność odpowiada za animację materiału modelu
             });
         var loader = new THREE.JSONLoader()
