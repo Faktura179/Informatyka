@@ -49,7 +49,7 @@ $(document).ready(function () {
         var delta = clock.getDelta();
         
         raycaster.setFromCamera( mouse, camera );
-        var intersects = raycaster.intersectObjects( scene.children, true );
+        var intersects = raycaster.intersectObjects( floor.container.children, true );
         if (intersects.length > 0) {
             if(mousedown){
                 clickedVect = intersects[0].point

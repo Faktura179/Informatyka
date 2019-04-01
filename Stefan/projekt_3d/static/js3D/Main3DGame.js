@@ -3,6 +3,14 @@ var item
 var light
 var ui
 var net
+var player
+
+var clickedVect = new THREE.Vector3(0,0,0); // wektor określający PUNKT kliknięcia
+var directionVect = new THREE.Vector3(0,0,0); // wektor określający KIERUNEK ruchu playera
+var raycaster = new THREE.Raycaster(); // obiekt symulujący "rzucanie" promieni
+var mouseVector = new THREE.Vector2() // ten wektor czyli pozycja w przestrzeni 2D na ekranie(x,y) wykorzystany będzie do określenie pozycji myszy na ekranie a potem przeliczenia na pozycje 3D
+var clock = new THREE.Clock();
+
 $(document).ready(function () {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -18,10 +26,10 @@ $(document).ready(function () {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
-    orbitControl.addEventListener('change', function () {
-        renderer.render(scene, camera)
-    });
+    // var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+    // orbitControl.addEventListener('change', function () {
+    //     renderer.render(scene, camera)
+    // });
     var axes = new THREE.AxesHelper(1000)
     scene.add(axes)
     $("#root").append(renderer.domElement);
@@ -33,13 +41,59 @@ $(document).ready(function () {
     light= new Light()
     net=new Net()
     ui= new Ui()
+    player = new Player()
 
-    //scene.add(level.getContainer())
+    $("canvas").mousedown(function (event) {
+        mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
+        raycaster.setFromCamera( mouseVector, camera );
+        var arr=[]
+        level.container.children.forEach(element => {
+            element.children.forEach(el=>{
+                if(el.isFloor==true) arr.push(el)
+            })
+        });
+        var intersects = raycaster.intersectObjects( arr, true );
+        //console.log(arr)
+        if(intersects.length>0){
+            if(intersects[0].object.isFloor == true){
+                clickedVect = intersects[0].point
+                directionVect = clickedVect.clone().sub(player.getPlayerCont().position).normalize()
+                //funkcja normalize() przelicza współrzędne x,y,z wektora na zakres 0-1
+                //jest to wymagane przez kolejne funkcje	
+                var angle = Math.atan2(
+                    player.getPlayerCont().position.clone().x - clickedVect.x,
+                    player.getPlayerCont().position.clone().z - clickedVect.z
+                )
+                player.getPlayerMesh().rotation.y = angle
+            }
+        }
+    })
 
     function render() {
 
         requestAnimationFrame(render);
+        var delta = clock.getDelta();
 
+        player.model.updateModel(delta)
+
+        directionVect.y=0
+        clickedVect.y=0
+        var speed=Settings.hexRadius/100*3
+        if(player.getPlayerCont().position.clone().distanceTo(clickedVect)>speed+0.1){
+            
+            player.getPlayerCont().translateOnAxis(directionVect, speed)
+            player.model.setAnimation()
+        }else{
+            player.getPlayerCont().translateOnAxis(directionVect, 0)
+            player.model.stopAnimation()
+        }
+                
+        camera.position.x = player.getPlayerCont().position.x
+        camera.position.z = player.getPlayerCont().position.z + Settings.hexRadius
+        camera.position.y = player.getPlayerCont().position.y + Settings.hexRadius
+        camera.lookAt(player.getPlayerCont().position)
+        
         renderer.render(scene, camera);
     }
 

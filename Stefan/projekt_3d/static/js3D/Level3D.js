@@ -18,11 +18,11 @@ class Level3D{
         error:function(){
         
         }})
-        console.log(result)
+        //console.log(result)
         var container = new THREE.Object3D()
         result.level.level.forEach(element => {
             var arr = element.dirIn || []
-            console.log(element.dirIn)
+           // console.log(element.dirIn)
             arr.push(element.dirOut)
             var hex = new Hex3D(arr)
             hex.position.x=Settings.hexRadius*element.x*2/Math.sqrt(3)+(Settings.hexRadius*element.x/Math.sqrt(3))
@@ -42,6 +42,7 @@ class Level3D{
         });
         this.container=container
         this.scene.add(container)
+        this.scene.add(player.getPlayerCont())
     }
 
 }

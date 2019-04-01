@@ -2,7 +2,7 @@ class Hex3D {
 
     constructor(arrDoors){
        var container = new THREE.Object3D() // kontener na obiekty 3D
-       var geometry = new THREE.BoxGeometry( Settings.hexRadius*2/Math.sqrt(3), Settings.hexRadius/2, Settings.hexRadius/25 );
+       var geometry = new THREE.BoxGeometry( Settings.hexRadius*2/Math.sqrt(3), Settings.hexRadius/(3/2), Settings.hexRadius/25 );
        var wall = new THREE.Mesh(geometry, Settings.wallMaterial);
        for (var i = 0; i < 6; i++) {
             var side
@@ -32,6 +32,7 @@ class Hex3D {
      var cylinder = new THREE.Mesh( geometry, Settings.floorMaterial );
      cylinder.position.y=-Settings.hexRadius/4
      cylinder.receiveShadow=true
+     cylinder.isFloor=true
      container.add( cylinder );
 
        return container
