@@ -1,14 +1,15 @@
 class Model{
-    constructor(){
+    constructor(texture){
         this.container = new THREE.Object3D()
         this.mixer=null
         this.model=null
+        this.texture=texture
     }
     
     loadModel(url, callback){
         var material = new THREE.MeshPhongMaterial(
             {
-                map: new THREE.TextureLoader().load("/mats/tucow_model1.png"),
+                map: new THREE.TextureLoader().load(this.texture),
                 morphTargets: true // ta własność odpowiada za animację materiału modelu
             });
         var loader = new THREE.JSONLoader()
@@ -22,6 +23,7 @@ class Model{
             that.model=model
             model.castShadow=true
             model.receiveShadow=true
+            that.mixer=new THREE.AnimationMixer(model)
             callback(that.container,model)
         })
     }

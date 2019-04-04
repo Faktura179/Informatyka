@@ -4,6 +4,7 @@ var light
 var ui
 var net
 var player
+var allies=[]
 
 var clickedVect = new THREE.Vector3(0,0,0); // wektor określający PUNKT kliknięcia
 var directionVect = new THREE.Vector3(0,0,0); // wektor określający KIERUNEK ruchu playera
@@ -23,7 +24,7 @@ $(document).ready(function () {
     renderer.setClearColor(0xffffff);
     renderer.setSize($(window).width(), $(window).height());
 
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = false;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
@@ -42,6 +43,8 @@ $(document).ready(function () {
     net=new Net()
     ui= new Ui()
     player = new Player()
+    allies.push(new Ally())
+    
 
     $("canvas").mousedown(function (event) {
         mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
@@ -69,25 +72,35 @@ $(document).ready(function () {
             }
         }
     })
+    $("canvas").mousemove(function(event){
+        mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
+    })
 
     function render() {
 
         requestAnimationFrame(render);
         var delta = clock.getDelta();
-
-        player.model.updateModel(delta)
-
         directionVect.y=0
         clickedVect.y=0
         var speed=Settings.hexRadius/100*3
-        if(player.getPlayerCont().position.clone().distanceTo(clickedVect)>speed+0.1){
-            
-            player.getPlayerCont().translateOnAxis(directionVect, speed)
-            player.model.setAnimation()
-        }else{
-            player.getPlayerCont().translateOnAxis(directionVect, 0)
-            player.model.stopAnimation()
+
+
+        allies.forEach((el,index)=>{
+            el.model.updateModel(delta)
+            el.move(clickedVect,directionVect,speed,index)
+            el.ring.visible=false;
+        })
+        raycaster.setFromCamera( mouseVector, camera );
+        var intersects = raycaster.intersectObjects( allies,true );
+        if(intersects.length>0){
+            intersects[0].object.parent.parent.ring.visible=true
         }
+
+
+
+        player.model.updateModel(delta)
+        player.move(directionVect,clickedVect,speed)
                 
         camera.position.x = player.getPlayerCont().position.x
         camera.position.z = player.getPlayerCont().position.z + Settings.hexRadius
