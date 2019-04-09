@@ -44,7 +44,7 @@ $(document).ready(function () {
     ui= new Ui()
     player = new Player()
     allies.push(new Ally())
-    
+    allies.push(new Ally())
 
     $("canvas").mousedown(function (event) {
         mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
@@ -56,7 +56,7 @@ $(document).ready(function () {
                 if(el.isFloor==true) arr.push(el)
             })
         });
-        var intersects = raycaster.intersectObjects( arr, true );
+        var intersects = raycaster.intersectObjects( arr.concat(allies), true );
         //console.log(arr)
         if(intersects.length>0){
             if(intersects[0].object.isFloor == true){
@@ -69,6 +69,11 @@ $(document).ready(function () {
                     player.getPlayerCont().position.clone().z - clickedVect.z
                 )
                 player.getPlayerMesh().rotation.y = angle
+            }
+            else{
+                var obj = intersects[0].object.parent.parent
+                obj.isMoving=!obj.isMoving
+                obj.model.stopAnimation()
             }
         }
     })
@@ -85,10 +90,11 @@ $(document).ready(function () {
         clickedVect.y=0
         var speed=Settings.hexRadius/100*3
 
-
+        var followers=0
         allies.forEach((el,index)=>{
             el.model.updateModel(delta)
-            el.move(clickedVect,directionVect,speed,index)
+            if(el.isMoving)
+                el.move(player.getPlayerCont().position.clone(),speed,followers++)
             el.ring.visible=false;
         })
         raycaster.setFromCamera( mouseVector, camera );

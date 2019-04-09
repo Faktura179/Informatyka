@@ -4,6 +4,7 @@ class Model{
         this.mixer=null
         this.model=null
         this.texture=texture
+        //this.container.add( new THREE.AxesHelper(100))
     }
     
     loadModel(url, callback){

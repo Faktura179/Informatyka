@@ -7,16 +7,22 @@ class Ally extends THREE.Object3D{
         })
         this.ring = new Ring()
         this.add(this.ring)
-        console.log(this)
+        this.isMoving=false
     }
 
-    move(directionVect,clickedVect,speed,i){
-        if(this.position.clone().distanceTo(clickedVect)>speed+0.1+Settings.hexRadius/4*i){
-            
-            this.translateOnAxis(directionVect, speed)
+    move(clicked,speed,i){
+        clicked = clicked || new THREE.Vector3(0,0,0);
+        var dir = clicked.clone().sub(this.position).normalize()
+        if(this.position.clone().distanceTo(clicked)>speed+0.1+Settings.hexRadius/2*(i+1) && this.isMoving){
+            var angle = Math.atan2(
+                this.position.clone().x - clicked.x,
+                this.position.clone().z - clicked.z
+            )
+            this.model.container.rotation.y = angle
+            this.translateOnAxis(dir, speed-0.5)
             this.model.setAnimation()
         }else{
-            this.translateOnAxis(directionVect, 0)
+            this.translateOnAxis(dir, 0)
             this.model.stopAnimation()
         }
     }

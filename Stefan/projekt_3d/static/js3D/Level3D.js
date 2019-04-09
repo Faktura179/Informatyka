@@ -43,7 +43,9 @@ class Level3D{
         this.container=container
         this.scene.add(container)
         this.scene.add(player.getPlayerCont())
-        this.scene.add(allies[0])
+        allies.forEach(el=>{
+            this.scene.add(el)
+        })  
     }
 
 }
