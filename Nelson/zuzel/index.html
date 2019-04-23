@@ -14,47 +14,54 @@
                 this.y=y
                 this.r=speed
                 this.angle=0
-                this.turnAngle=Math.PI/130
+                this.turnAngle=Math.PI/90
                 this.isTurning=false
+                this.isMoving=true
                 this.path=[]
 
-               // this.start()
+               
             }
             
-            // start(){
-            //     this.interval = setInterval(this.move.bind(this),1000/60)
-            // }
+            start(){
+                this.isMoving=true
+            }
 
-            // stop(){
-            //     clearInterval(this.interval)
-            //     this.interval=null
-            // }
+            stop(){
+                this.isMoving=false
+            }
 
             move(){
-                var dx=this.x+(this.r*Math.cos(this.angle))
-                var dy=this.y-(this.r*Math.sin(this.angle))
-                if(this.isTurning){
-                    dx=this.x + (this.r*Math.cos(this.turnAngle+this.angle))
-                    dy=this.y - (this.r*Math.sin(this.turnAngle+this.angle))
-                    this.angle+=this.turnAngle
-                }
-                this.path.push({x:this.x,y:this.y,dx:dx,dy:dy})
-                ctx.lineWidth="2"
+                if(this.isMoving){
+                    var dx=this.x+(this.r*Math.cos(this.angle))
+                    var dy=this.y-(this.r*Math.sin(this.angle))
+                    if(this.isTurning){
+                        dx=this.x + (this.r*Math.cos(this.turnAngle+this.angle))
+                        dy=this.y - (this.r*Math.sin(this.turnAngle+this.angle))
+                        this.angle+=this.turnAngle
+                    }
+                    this.path.push({x:this.x,y:this.y,dx:dx,dy:dy})
+                    ctx.lineWidth="2"
 
-                ctx.beginPath()
-                ctx.moveTo(this.x,this.y)
-                ctx.lineTo(dx,dy)
-                ctx.closePath()
-                ctx.stroke()
-                this.x=dx
-                this.y=dy
+                    ctx.beginPath()
+                    ctx.moveTo(this.x,this.y)
+                    ctx.lineTo(dx,dy)
+                    ctx.closePath()
+                    ctx.stroke()
+                    this.x=dx
+                    this.y=dy
+
+                    if(!ctx.isPointInPath(raceTrack,this.x,this.y) || ctx.isPointInPath(insideGrass,this.x,this.y)){
+                        alert("Przegrałeś!")
+                        this.isMoving=false
+                    }
+                }
             }
 
             drawPath(){
                 ctx.lineWidth="2"
-                ctx.strokeStyle="#333333"
+                ctx.strokeStyle="rgba(255,0,0,0.2)"
                 this.path.forEach((el,index)=>{
-                    if(index>this.path.length-60){
+                    if(index>this.path.length-60 && this.isMoving){
                         //
                         ctx.strokeStyle="#000000"
                     }
@@ -72,23 +79,43 @@
         var speed=3
         var trackWidth=180
         var players=[]
+        var grass = document.createElement("img")
+        grass.src="grass.jpg"
+        var grassPat
+        var gravel = document.createElement("img")
+        gravel.src="gravel.jpg"
+        var gravelPat
+        var raceTrack = new Path2D()
+        raceTrack.arc(250,250,248,Math.PI/2,Math.PI*3/2)
+        raceTrack.arc(750,250,248,Math.PI*3/2,Math.PI/2)
+        var insideGrass = new Path2D()
+        insideGrass.arc(250,250,248-(trackWidth),Math.PI/2,Math.PI*3/2)
+        insideGrass.arc(750,250,248-(trackWidth),Math.PI*3/2,Math.PI/2)
+
 
         function drawPlayfield(){
             ctx.lineWidth="4"
-            ctx.beginPath()
-            ctx.arc(250,250,248,Math.PI/2,Math.PI*3/2)
-            ctx.arc(750,250,248,Math.PI*3/2,Math.PI/2)
-            ctx.closePath()
+            // ctx.beginPath()
+            // ctx.arc(250,250,248,Math.PI/2,Math.PI*3/2)
+            // ctx.arc(750,250,248,Math.PI*3/2,Math.PI/2)
+            ctx.fillStyle = gravelPat;
+            ctx.fill(raceTrack);
+            //ctx.closePath()
             ctx.stroke()
-            ctx.beginPath()
-            ctx.arc(250,250,248-(trackWidth),Math.PI/2,Math.PI*3/2)
-            ctx.arc(750,250,248-(trackWidth),Math.PI*3/2,Math.PI/2)
-            ctx.closePath()
+            // ctx.beginPath()
+            // ctx.arc(250,250,248-(trackWidth),Math.PI/2,Math.PI*3/2)
+            // ctx.arc(750,250,248-(trackWidth),Math.PI*3/2,Math.PI/2)
+            ctx.fillStyle = grassPat;
+            ctx.fill(insideGrass);
+            // ctx.closePath()
             ctx.stroke()
         }
 
         function render(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = grassPat
+            ctx.fill() 
             drawPlayfield()
 
             players[0].drawPath()
@@ -101,7 +128,9 @@
             canvas = document.getElementById("canvas")
             ctx = canvas.getContext("2d")
 
-            
+            gravelPat = ctx.createPattern(gravel, "repeat");
+            grassPat = ctx.createPattern(grass, "repeat");
+
             players.push(new Player(500,450,speed,ctx))
             document.onkeydown=function(e){
                 if(e.key==" "){
