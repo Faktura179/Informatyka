@@ -4,6 +4,7 @@ class Ally extends THREE.Object3D{
         this.model=new Model("/mats/tucow_model1.png")
         this.model.loadModel("/mats/tris.js",(container,model)=>{
             this.add(container)
+            model.rotation.y=Math.PI*3/2
         })
         this.ring = new Ring()
         this.add(this.ring)

@@ -11,6 +11,11 @@ var directionVect = new THREE.Vector3(0,0,0); // wektor określający KIERUNEK r
 var raycaster = new THREE.Raycaster(); // obiekt symulujący "rzucanie" promieni
 var mouseVector = new THREE.Vector2() // ten wektor czyli pozycja w przestrzeni 2D na ekranie(x,y) wykorzystany będzie do określenie pozycji myszy na ekranie a potem przeliczenia na pozycje 3D
 var clock = new THREE.Clock();
+var raycasterC = new THREE.Raycaster();
+var geometry = new THREE.SphereGeometry( 10, 32, 32 );
+var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+var kulka = new THREE.Mesh( geometry, material );
+
 
 $(document).ready(function () {
     var scene = new THREE.Scene();
@@ -25,10 +30,10 @@ $(document).ready(function () {
     renderer.setSize($(window).width(), $(window).height());
 
     renderer.shadowMap.enabled = false;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap5;
 
-    // var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
-    // orbitControl.addEventListener('change', function () {
+    // var orbitControl = new THREE.OrbitControls(ca5mera, renderer.domElement);
+    // orbitControl.addEventListener('change', funct5ion () {
     //     renderer.render(scene, camera)
     // });
     var axes = new THREE.AxesHelper(1000)
@@ -81,7 +86,7 @@ $(document).ready(function () {
         mouseVector.x = (event.clientX / $(window).width()) * 2 - 1;
         mouseVector.y = -(event.clientY / $(window).height()) * 2 + 1;
     })
-
+    scene.add(kulka)
     function render() {
 
         requestAnimationFrame(render);
@@ -101,6 +106,21 @@ $(document).ready(function () {
         var intersects = raycaster.intersectObjects( allies,true );
         if(intersects.length>0){
             intersects[0].object.parent.parent.ring.visible=true
+        }
+
+
+        var ray = new THREE.Ray(player.getPlayerCont().position, player.getPlayerMesh().getWorldDirection(new THREE.Vector3(1,1,1)))
+        raycasterC.ray = ray
+        var intersects = raycasterC.intersectObject(level.getContainer(), true); 
+        if (intersects[0]) {  
+            // console.log(intersects[0].distance) // odległość od vertex-a na wprost, zgodnie z kierunkiem ruchu
+            // console.log(intersects[0].point) // współrzędne vertexa na wprost
+            if(intersects[0].distance<50){
+                clickedVect=player.getPlayerCont().position
+            }
+            kulka.position.x=intersects[0].point.x
+            kulka.position.y=intersects[0].point.y
+            kulka.position.z=intersects[0].point.z
         }
 
 

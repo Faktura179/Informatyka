@@ -18,7 +18,7 @@ class Model{
         loader.load(url, function(geometry){
             var model = new THREE.Mesh(geometry, material)
             model.position.y=0
-            model.rotation.y = Math.PI*3/2; // ustaw obrót modelu
+            model.rotation.y = Math.PI*5/2; // ustaw obrót modelu
             model.scale.set(Settings.hexRadius/100,Settings.hexRadius/100,Settings.hexRadius/100); // ustaw skalę modelu
             that.container.add(model)
             that.model=model
