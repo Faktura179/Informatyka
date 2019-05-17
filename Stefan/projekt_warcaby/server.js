@@ -14,6 +14,16 @@ var extensions={
 }
 
 var users=[]
+var pionki=[
+    [0,2,0,2,0,2,0,2],
+    [2,0,2,0,2,0,2,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,1,0,1,0,1,0,1],
+    [1,0,1,0,1,0,1,0]
+]
 
 function servResponse(req,res) {
     var allData = "";
@@ -37,6 +47,14 @@ function servResponse(req,res) {
               break;    
             case "WAIT":
                 res.end(JSON.stringify({users:users}))
+                break;
+            case "MOVE":
+                res.end(JSON.stringify({pionki:pionki}))
+                break;
+            case "MOVED":
+                var nowe = finishObj.pionki
+                pionki=nowe
+                res.end("")
                 break;
           }
      })

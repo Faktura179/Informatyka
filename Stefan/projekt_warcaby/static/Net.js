@@ -18,6 +18,7 @@ class Net{
                     if(that.player==1)
                         $("#status").text("Witaj "+ that.name + "! Grasz bialymi. Dolaczyl gracz "+data.users[1])
                     clearInterval(that.interval)
+
                 }
             },
             error:function(){
@@ -45,6 +46,7 @@ class Net{
                         game.camera.position.set(0,320,-520)
                         game.camera.lookAt(0,0,0)
                         $("#status").text("Witaj "+ user + "! Grasz czarnymi")
+                        $("#move").css("display","block")
                     }else{
                         $("#status").text("Witaj "+ user + "! Grasz bialymi")
                     }
@@ -74,5 +76,35 @@ class Net{
             }
             }) 
     }
-    
+    move(){
+        $.ajax({
+            url:"/",
+            data: {
+                action: "MOVE",              
+            },
+            type:"POST",
+            success:function(data){
+                
+            },
+            error:function(){
+                console.log("blad przy odbieraniu info")
+            }
+        }) 
+    }
+    moved(){
+        $.ajax({
+            url:"/",
+            data: {
+                action: "MOVED", 
+                pionki:game.pionki             
+            },
+            type:"POST",
+            success:function(data){
+                
+            },
+            error:function(){
+                console.log("blad przy ruszaniu sie")
+            }
+        }) 
+    }
 }

@@ -148,8 +148,17 @@ class Game{
             arr.forEach(el=>{
                 el.color=0xffffff
             })
-            intersects[ 0 ].object.color= 0x00ffff
-            this.selectedPiece=intersects[0].object
+            
+            if(this.selectedPiece==null){
+                this.selectedPiece=intersects[0].object
+                intersects[ 0 ].object.color= 0x00ffff
+            }
+            else if(this.selectedPiece==intersects[0].object){
+                this.selectedPiece=null
+            }else{
+                this.selectedPiece=intersects[0].object
+                intersects[ 0 ].object.color= 0x00ffff
+            }
         }
         var intersects =this.raycaster.intersectObjects( this.blackTiles, true )
         if(intersects.length>0){
@@ -158,11 +167,65 @@ class Game{
                 var x = intersects[0].object.x
                 var y = intersects[0].object.y
                 if(this.pionki[y][x]==0){
-                    this.selectedPiece.position.set(pos.x,20,pos.z)
-                    this.pionki[y][x]=net.player
-                    this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
-                    this.selectedPiece.x=x
-                    this.selectedPiece.y=y
+                    console.log(x,y)
+                    if(net.player==1){
+                        if(y == this.selectedPiece.y - 1){
+                            if(this.selectedPiece.x + 1 == x || this.selectedPiece.x - 1 ==x){
+                                this.selectedPiece.position.set(pos.x,20,pos.z)
+                                this.pionki[y][x]=net.player
+                                this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                this.selectedPiece.x=x
+                                this.selectedPiece.y=y
+                            }
+                        }else if(y == this.selectedPiece.y - 2){//zbijanie bez nizszczenia pionka przeciwnika
+                            if(this.selectedPiece.x + 2 == x){
+                                if(this.pionki[y-1][x+1]==2){
+                                    this.selectedPiece.position.set(pos.x,20,pos.z)
+                                    this.pionki[y][x]=net.player
+                                    this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                    this.selectedPiece.x=x
+                                    this.selectedPiece.y=y
+                                }
+                            }else if(this.selectedPiece.x - 2 == x){
+                                if(this.pionki[y-1][x-1]==2){
+                                    this.selectedPiece.position.set(pos.x,20,pos.z)
+                                    this.pionki[y][x]=net.player
+                                    this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                    this.selectedPiece.x=x
+                                    this.selectedPiece.y=y
+                                }
+                            }
+                        }
+                    }else{
+                        if(y == this.selectedPiece.y + 1){
+                            if(this.selectedPiece.x + 1 == x || this.selectedPiece.x - 1 ==x){
+                                this.selectedPiece.position.set(pos.x,20,pos.z)
+                                this.pionki[y][x]=net.player
+                                this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                this.selectedPiece.x=x
+                                this.selectedPiece.y=y
+                            }
+                        }else if(y == this.selectedPiece.y + 2){//zbijanie bez nizszczenia pionka przeciwnika
+                            if(this.selectedPiece.x + 2 == x){
+                                if(this.pionki[y+1][x+1]==1){
+                                    this.selectedPiece.position.set(pos.x,20,pos.z)
+                                    this.pionki[y][x]=net.player
+                                    this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                    this.selectedPiece.x=x
+                                    this.selectedPiece.y=y
+                                }
+                            }else if(this.selectedPiece.x - 2 == x){
+                                if(this.pionki[y+1][x-1]==1){
+                                    this.selectedPiece.position.set(pos.x,20,pos.z)
+                                    this.pionki[y][x]=net.player
+                                    this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
+                                    this.selectedPiece.x=x
+                                    this.selectedPiece.y=y
+                                }
+                            }
+                        }
+                    }
+                    
                 }
             }
         }
