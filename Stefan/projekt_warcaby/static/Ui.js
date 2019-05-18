@@ -1,6 +1,7 @@
 class UI{
     constructor(){
         this.clicks()
+        setInterval(this.tablica, 200)
     }
 
     clicks(){
@@ -10,5 +11,8 @@ class UI{
         $("#reset").click(function(){
             net.reset()
         })
+    }
+    tablica(){
+        $("#tablica").text(JSON.stringify(game.pionki,null,0).replace(/\],/g,"\],\n"));
     }
 }
