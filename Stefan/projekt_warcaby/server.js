@@ -44,17 +44,27 @@ function servResponse(req,res) {
            //inna akcja
            case "RESET":
                 users=[]
+                pionki=[
+                    [0,2,0,2,0,2,0,2],
+                    [2,0,2,0,2,0,2,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,1,0,1,0,1,0,1],
+                    [1,0,1,0,1,0,1,0]
+                ]
               break;    
             case "WAIT":
                 res.end(JSON.stringify({users:users}))
                 break;
-            case "MOVE":
+            case "COMPARE":
                 res.end(JSON.stringify({pionki:pionki}))
                 break;
-            case "MOVED":
-                var nowe = finishObj.pionki
+            case "UPDATE":
+                var nowe = JSON.parse( finishObj.pionki)
                 pionki=nowe
-                res.end("")
+                res.end(JSON.stringify({}))
                 break;
           }
      })

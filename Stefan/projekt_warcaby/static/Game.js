@@ -45,6 +45,9 @@ class Game{
         renderer.domElement.onclick=this.onClick.bind(this)
 
 
+
+        this.whitePieces=null
+        this.blackPieces=null
         this.szachownica=[
             [1,0,1,0,1,0,1,0],
             [0,1,0,1,0,1,0,1],
@@ -107,6 +110,16 @@ class Game{
     setPieces(){
         var whitePiece = new Piece("/img/white_pawn.jpg")
         var blackPiece = new Piece("/img/red_pawn.jpg")
+        if(this.whitePieces!=null){
+            this.whitePieces.forEach((el,index)=>{
+                this.scene.remove(el)
+            })
+        }
+        if(this.blackPieces!=null){
+            this.blackPieces.forEach((el,index)=>{
+                this.scene.remove(el)
+            })
+        }
         this.whitePieces=[]
         this.blackPieces=[]
         for(var i =0;i<this.pionki.length;i++){
@@ -176,23 +189,28 @@ class Game{
                                 this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                 this.selectedPiece.x=x
                                 this.selectedPiece.y=y
+                                net.update()
                             }
                         }else if(y == this.selectedPiece.y - 2){//zbijanie bez nizszczenia pionka przeciwnika
                             if(this.selectedPiece.x + 2 == x){
-                                if(this.pionki[y-1][x+1]==2){
+                                if(this.pionki[this.selectedPiece.y-1][this.selectedPiece.x+1]==2){
+                                    this.pionki[this.selectedPiece.y-1][this.selectedPiece.x+1]=0
                                     this.selectedPiece.position.set(pos.x,20,pos.z)
                                     this.pionki[y][x]=net.player
                                     this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                     this.selectedPiece.x=x
                                     this.selectedPiece.y=y
+                                    net.update()
                                 }
                             }else if(this.selectedPiece.x - 2 == x){
-                                if(this.pionki[y-1][x-1]==2){
+                                if(this.pionki[this.selectedPiece.y-1][this.selectedPiece.x-1]==2){
+                                    this.pionki[this.selectedPiece.y-1][this.selectedPiece.x-1]=0
                                     this.selectedPiece.position.set(pos.x,20,pos.z)
                                     this.pionki[y][x]=net.player
                                     this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                     this.selectedPiece.x=x
                                     this.selectedPiece.y=y
+                                    net.update()
                                 }
                             }
                         }
@@ -204,23 +222,28 @@ class Game{
                                 this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                 this.selectedPiece.x=x
                                 this.selectedPiece.y=y
+                                net.update()
                             }
                         }else if(y == this.selectedPiece.y + 2){//zbijanie bez nizszczenia pionka przeciwnika
                             if(this.selectedPiece.x + 2 == x){
-                                if(this.pionki[y+1][x+1]==1){
+                                if(this.pionki[this.selectedPiece.y+1][this.selectedPiece.x+1]==1){
+                                    this.pionki[this.selectedPiece.y+1][this.selectedPiece.x+1]=0
                                     this.selectedPiece.position.set(pos.x,20,pos.z)
                                     this.pionki[y][x]=net.player
                                     this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                     this.selectedPiece.x=x
                                     this.selectedPiece.y=y
+                                    net.update()
                                 }
                             }else if(this.selectedPiece.x - 2 == x){
-                                if(this.pionki[y+1][x-1]==1){
+                                if(this.pionki[this.selectedPiece.y+1][this.selectedPiece.x-1]==1){
+                                    this.pionki[this.selectedPiece.y+1][this.selectedPiece.x-1]=0
                                     this.selectedPiece.position.set(pos.x,20,pos.z)
                                     this.pionki[y][x]=net.player
                                     this.pionki[this.selectedPiece.y][this.selectedPiece.x]=0
                                     this.selectedPiece.x=x
                                     this.selectedPiece.y=y
+                                    net.update()
                                 }
                             }
                         }
