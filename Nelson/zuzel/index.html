@@ -10,7 +10,7 @@
         var ctx
         var start =false
         class Player{
-            constructor(x,y,speed ,ctx){
+            constructor(x,y,speed ,ctx,num){
                 this.x=x
                 this.y=y
                 this.r=speed
@@ -19,8 +19,10 @@
                 this.isTurning=false
                 this.isMoving=true
                 this.path=[]
-
-               
+                this.laps=0
+                this.num=num
+                this.div = document.createElement("div")
+                document.body.append(this.div)
             }
             
             start(){
@@ -55,6 +57,11 @@
                         alert("Przegrałeś!")
                         this.isMoving=false
                     }
+                    if(ctx.isPointInPath(finishLine,this.x,this.y)){
+                        this.laps++
+                        console.log(this.laps)
+                        this.div.innerHTML="Player "+ this.num +" Lap: "+this.laps
+                    }
                 }
             }
 
@@ -62,7 +69,7 @@
                 ctx.lineWidth="2"
                 ctx.strokeStyle="#000000"
                 this.path.forEach((el,index)=>{
-                    if(index<this.path.length - 60 && this.isMoving){
+                    if(index<this.path.length - 60){
                         ctx.strokeStyle="rgba(0,0,0,"+ index/this.path.length +")"
                     }else{
                         ctx.strokeStyle="#000000" 
@@ -86,6 +93,8 @@
         var trackWidth=180
         var players=[]
         var buttons=[]
+        var numPlay
+        var toGo=3
 
         var motor = document.createElement("img")
         motor.src="motorcycle1.png"
@@ -105,6 +114,9 @@
         insideGrass.arc(250,250,248-(trackWidth),Math.PI/2,Math.PI*3/2)
         insideGrass.arc(750,250,248-(trackWidth),Math.PI*3/2,Math.PI/2)
         insideGrass.closePath()
+
+        var finishLine = new Path2D()
+        finishLine.rect(500,250+(248-trackWidth),speed,250)
 
 
         function drawPlayfield(){
@@ -130,13 +142,38 @@
             ctx.rect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = grassPat
             ctx.fill() 
+
             drawPlayfield()
 
-            players.forEach((el)=>{
+            ctx.fillStyle= "#000000"
+            ctx.fill(finishLine)
+
+            var Moving=[]
+            var bestLaps=0
+            var win = false
+            players.forEach((el,index)=>{
                 el.drawPath()
                 el.move()
+                if(el.laps==toGo){
+                    alert("Gracz nr "+ (index+1) + " wygrał!")
+                    win=true
+                }
+                if(el.laps>bestLaps){
+                    bestLaps=el.laps
+                }
+                if(el.isMoving){
+                    Moving.push(el.num)
+                }
             })
-            
+            document.getElementById("best").innerHTML="Winner Laps: " + bestLaps +"/"+toGo
+            if(Moving.length==1 && numPlay>1){
+                alert("Ostatni żywy gracz wygrywa! Brawo Player " + Moving[0])
+                return
+            }
+            if(win){
+                return
+            }
+
 
             requestAnimationFrame(render)
         }
@@ -151,7 +188,7 @@
             //kradzione z w3c :)
             //
             //
-            var numPlay
+            
             var modal = document.getElementById("myModal");
             var span = document.getElementById("close");
             span.onclick = function() {
@@ -171,7 +208,7 @@
             }
 
             for(let i =0;i<numPlay;i++){
-                players.push(new Player(500,420+(10*i),speed,ctx))
+                players.push(new Player(500,420+(10*i),speed,ctx,i+1))
             }
             
             document.onkeydown=function(e){
@@ -246,5 +283,6 @@
         </div>
     </div>
     <canvas id="canvas" width="1000" height="500"></canvas>
+    <div id="best"></div>
 </body>
 </html>
