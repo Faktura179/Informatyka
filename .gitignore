@@ -3,3 +3,7 @@ node_modules
 
 #mp3
 *.mp3
+
+#zuzel
+Nelson/zuzel/*.png
+Nelson/zuzel/*.jpg
