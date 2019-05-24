@@ -3,7 +3,9 @@ class Griditem extends THREE.Object3D {
     constructor (){
  
         super()
- 
+        
+        this.isGrid = true
+
         var lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(0, 0, 0));

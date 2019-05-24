@@ -26,6 +26,20 @@ class Game{
         // orbitControl.addEventListener('change', function () {
         //     renderer.render(scene, camera)
         // });
+
+        var dl1 = new THREE.DirectionalLight(0xffffff,0.5)
+        scene.add(dl1)
+        var dl2 = new THREE.DirectionalLight(0xffffff,0.8)
+        dl2.position.z=0.5
+        dl2.position.x=0.5
+        dl2.position.y=0.5
+        scene.add(dl2)
+        var dl3 = new THREE.DirectionalLight(0xffffff,0.8)
+        dl3.position.z=-0.5
+        dl3.position.x=-0.5
+        dl3.position.y=0.5
+        scene.add(dl3)
+
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
         renderer.domElement.onclick=this.onClick.bind(this)
@@ -45,31 +59,14 @@ class Game{
     
         this.angleH = 1
         this.angleV = 1
-        $(document).keydown(function (e){
-            switch(e.key){
-                case "a":
-                    console.log("a")
-                    game.angleH += Math.PI/180
-                    break;
-                case "s":
-                    console.log("s")
-                    game.angleV-=Math.PI/180
-                    break;
-                case "d":
-                    console.log("d")
-                    game.angleH-=Math.PI/180
-                    break;
-                case "w":
-                    console.log("w")
-                    game.angleV+=Math.PI/180
-                    break;
-            }
-        })
+        $(document).keydown(this.onKeyDown.bind(this))
 
         this.renderer = renderer
         this.scene = scene
         this.camera = camera
         this.render();
+        this.lastBlock=null
+        this.colors=[0xff0000,0x00ff00,0x0000ff,0xffff00,0x00ffff,0xff00ff]
     }
 
 
@@ -77,7 +74,6 @@ class Game{
     
         requestAnimationFrame(this.render.bind(this));
 
-        var speed = Date.now() * 0.00025;
         this.camera.position.x = Math.cos(this.angleH) * 1000;
         this.camera.position.z = Math.sin(this.angleH) * 1000;
         this.camera.position.y = Math.sin(this.angleV) * 1000
@@ -90,7 +86,19 @@ class Game{
         this.raycaster.setFromCamera( this.mouse, this.camera );
         var intersects =this.raycaster.intersectObjects( this.scene.children, true )
         if(intersects.length>0){
-            intersects[ 0 ].object.material.color.setHex(0x00ff00)
+            var pos = intersects[ 0 ].object.parent.position.clone()
+            if(intersects[0].object.parent.isGrid){    
+                pos.x+=25
+                pos.z+=25
+                
+            }else if(intersects[0].object.parent.isBlock){
+                pos.y+=36
+            }
+            var box = new Block()
+            box.position.copy(pos)
+            this.scene.add(box)
+            this.lastBlock=box
+
         }
     }
     onMouseMove( event ) {
@@ -101,5 +109,25 @@ class Game{
         this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
         this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     
+    }
+    onKeyDown(e){
+        console.log(e.key)
+        switch(e.key){
+            case "a":
+                this.angleH += Math.PI/180
+                break;
+            case "s":
+                this.angleV-=Math.PI/180
+                break;
+            case "d":
+                this.angleH-=Math.PI/180
+                break;
+            case "w":
+                this.angleV+=Math.PI/180
+                break;
+            case "Escape":
+                this.lastBlock.changeColor(this.colors)
+                break;
+        }
     }
 }
