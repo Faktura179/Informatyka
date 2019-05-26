@@ -6,6 +6,8 @@ class Block extends THREE.Object3D {
  
       this.isBlock=true
       this.color=0
+      this.direction=0
+      this.size=0
 
        // budowa elementów klocka (prostopadłościan i odpowiednia ilość cylindrów)
       var material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
@@ -47,10 +49,11 @@ class Block extends THREE.Object3D {
       singleGeometry.merge(c4.geometry, c4.matrix)
 
 
-
+      this.block= new THREE.Mesh(singleGeometry)
        var singleMesh = new THREE.Mesh(singleGeometry, material);
        this.add(singleMesh)
        this.material = material
+       this.singleMesh= singleMesh
     }
     changeColor(colors){
        if(this.color>=colors.length){
@@ -59,6 +62,38 @@ class Block extends THREE.Object3D {
           this.color++
        }
          this.material.color.setHex(colors[this.color])
+    }
+
+    changeSize(){
+      if(this.size<4){
+         this.size++
+      }else{
+         this.size=0
+      }
+      this.remove(this.singleMesh)
+      game.scene.remove(this.singleMesh)
+      this.singleMesh.geometry.dispose()
+      this.singleMesh.material.dispose()
+      var singleGeometry = new THREE.Geometry();
+      singleGeometry.merge(this.block.geometry, this.block.matrix)
+      for(var i = 0 ; i <this.size; i++){
+         var block = this.block.clone()
+         block.position.x=(i+1)*50
+         block.updateMatrix()
+         singleGeometry.merge(block.geometry, block.matrix)
+
+      }
+      this.singleMesh = new THREE.Mesh(singleGeometry, this.material);
+      this.singleMesh.rotation.y=Math.PI*(this.direction)/2
+      this.add(this.singleMesh)
+    }
+    rotate(){
+      if(this.direction<4){
+         this.direction++
+      }else{
+         this.direction=1
+      }
+      this.singleMesh.rotation.y=Math.PI*(this.direction)/2
     }
 
  }

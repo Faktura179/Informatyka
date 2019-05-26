@@ -22,6 +22,12 @@ class Game{
         renderer.setClearColor(0xffffff);
         renderer.setSize($(window).width(), $(window).height());
 
+        var stats = new Stats();
+        stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild( stats.dom );
+        this.stats=stats
+
+
         // var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         // orbitControl.addEventListener('change', function () {
         //     renderer.render(scene, camera)
@@ -73,6 +79,8 @@ class Game{
     render() {
     
         requestAnimationFrame(this.render.bind(this));
+
+        this.stats.update()
 
         this.camera.position.x = Math.cos(this.angleH) * 1000;
         this.camera.position.z = Math.sin(this.angleH) * 1000;
@@ -127,6 +135,24 @@ class Game{
                 break;
             case "Escape":
                 this.lastBlock.changeColor(this.colors)
+                break;
+            case " ":
+                this.lastBlock.changeSize()
+                break;
+            case "r":
+                this.lastBlock.rotate()
+                break;
+            case "ArrowRight":
+                this.lastBlock.position.x+=25
+                break;
+            case "ArrowLeft":
+                this.lastBlock.position.x-=25
+                break;
+            case "ArrowUp":
+                this.lastBlock.position.z-=25
+                break;
+            case "ArrowDown":
+                this.lastBlock.position.z+=25
                 break;
         }
     }
