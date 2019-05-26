@@ -100,6 +100,7 @@ class Game{
                 pos.z+=25
                 
             }else if(intersects[0].object.parent.isBlock){
+                if(net.addedBlocks.indexOf(intersects[0].object.parent.id)!=-1) return
                 pos.y+=36
             }
             var box = new Block()
@@ -107,6 +108,7 @@ class Game{
             this.scene.add(box)
             this.lastBlock=box
 
+            client.emit("create",{position:pos})
         }
     }
     onMouseMove( event ) {
@@ -119,41 +121,60 @@ class Game{
     
     }
     onKeyDown(e){
-        console.log(e.key)
+        //console.log(e.key)
+        var edited=true
+        var action=""
         switch(e.key){
             case "a":
                 this.angleH += Math.PI/180
+                edited=false
                 break;
             case "s":
                 this.angleV-=Math.PI/180
+                edited=false
                 break;
             case "d":
                 this.angleH-=Math.PI/180
+                edited=false
                 break;
             case "w":
                 this.angleV+=Math.PI/180
+                edited=false
                 break;
             case "Escape":
                 this.lastBlock.changeColor(this.colors)
+                action="Escape"
                 break;
             case " ":
                 this.lastBlock.changeSize()
+                action=" "
                 break;
             case "r":
                 this.lastBlock.rotate()
+                action="r"
                 break;
             case "ArrowRight":
                 this.lastBlock.position.x+=25
+                action="ArrowRight"
                 break;
             case "ArrowLeft":
                 this.lastBlock.position.x-=25
+                action="ArrowLeft"
                 break;
             case "ArrowUp":
                 this.lastBlock.position.z-=25
+                action="ArrowUp"
                 break;
             case "ArrowDown":
                 this.lastBlock.position.z+=25
+                action="ArrowDown"
                 break;
+            default:
+                edited=false
+                break;
+        }
+        if(edited){
+            client.emit("edit",{edit:action,id:this.lastBlock.name})
         }
     }
 }

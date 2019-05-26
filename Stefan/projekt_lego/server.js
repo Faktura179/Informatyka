@@ -5,11 +5,34 @@ var socketio = require('socket.io')(http);
 
 app.use(express.static("static"))
 
-//nasłuch na określonym porcie
-app.get("/", function (req, res) {
-    res.sendFile(__dirname+"/static/index.html")   
-})
+var actions = []
+var id=0
 
-app.listen(3000, function () { 
-    console.log("Listening on port 3000" )
-})
+socketio.on('connection', function (client) {
+    console.log("klient się podłączył " + client.id)
+    // client.id - unikalna nazwa klienta generowana przez socket.io
+    actions.forEach(el=>{
+        socketio.to(client.id).emit(el.action,el.data)
+    })
+    
+    client.on("disconnect", function () {
+        console.log("klient się rozłącza")
+    })
+
+    client.on("create",function (data){
+        client.broadcast.emit("create",{position:data.position, id:id})
+        actions.push({action:"create",data:{position:data.position, id:id}})
+        socketio.to(client.id).emit("name",{id:id})
+        id++
+    })
+
+    client.on("edit",function(data){
+        client.broadcast.emit("edit",{edit:data.edit,id:data.id})
+        actions.push({action:"edit",data:{edit:data.edit,id:data.id}})
+    })
+});
+
+http.listen(3000, function () {
+    console.log('listening on 3000');
+});
+
