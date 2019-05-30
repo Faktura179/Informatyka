@@ -7,9 +7,7 @@
     <title>Monetki</title>
     <script>
         window.onload=function(){
-            gett()
-            console.log("ftpuser")
-            
+            gett()            
         }
         
     function gett(){
@@ -20,13 +18,13 @@
         //console.log(this.readyState);
         if(this.readyState == 4 && this.status == 200) {
                 var ob=JSON.parse(this.responseText);
-                //console.log(ob);
-                var txt="";
+                console.log(ob)
+                var table = document.getElementById("table")
                 ob.forEach(function(el,index){
-                        txt+=el[0]+" "+el[1]+" "+el[2]+" "+el[3]+" "+el[4]+" "+el[5]+"<br/>";
-                        
+                    var html="<tr>" + "<td>" + el[1] + "</td>" + "<td>" + el[2] + "</td>" + "<td>" + el[3] + "</td>" + "<td>" + el[4] + "</td>" + "<td>" + el[5] + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "</tr>"   
+                    table.innerHTML+=html
                 })
-                document.getElementById("out").innerHTML = txt;
+               
         }
         };
         
@@ -35,8 +33,42 @@
  
     }
     </script>
+    <style>
+        table{
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        tr,th,td{
+            border:1px solid black;
+            border-top: 0;
+        }
+    </style>
 </head>
 <body>
-    <div id="out"></div>
+    <table id="table">
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                Nominał
+            </th>
+            <th>
+                Nr. kat
+            </th>
+            <th>
+                Stop
+            </th>
+            <th>
+                Rok
+            </th>
+            <th>
+                Capatcha
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+    </table>
 </body>
 </html>
