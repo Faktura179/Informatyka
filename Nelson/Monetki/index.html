@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Monetki</title>
+    <script>
+        window.onload=function(){
+            gett()
+            console.log("ftpuser")
+            
+        }
+        
+    function gett(){
+        var xhttp = new XMLHttpRequest(); 
+        xhttp.open("POST", "server.php", true);
+        
+        xhttp.onreadystatechange = function() {
+        //console.log(this.readyState);
+        if(this.readyState == 4 && this.status == 200) {
+                var ob=JSON.parse(this.responseText);
+                //console.log(ob);
+                var txt="";
+                ob.forEach(function(el,index){
+                        txt+=el[0]+" "+el[1]+" "+el[2]+" "+el[3]+" "+el[4]+" "+el[5]+"<br/>";
+                        
+                })
+                document.getElementById("out").innerHTML = txt;
+        }
+        };
+        
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("f=get");
+ 
+    }
+    </script>
+</head>
+<body>
+    <div id="out"></div>
+</body>
+</html>
