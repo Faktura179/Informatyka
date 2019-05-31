@@ -6,69 +6,137 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Monetki</title>
     <script>
+        class Monetka{
+            constructor(kraj,nominal,kat,stop,rok){
+                this.tr=document.createElement("tr")
+                kraj=kraj.toUpperCase()
+                kraj+=".JPG"
+                for(let i =0;i<5;i++){
+                    var td = document.createElement("td")
+                    if(i==0){
+                        var img = document.createElement("img")
+                        img.src="img/"+kraj
+                        img.classList.add("img")
+                        td.append(img)
+                        this.flag=img
+                    }else{
+                        td.innerText=arguments[i]
+                    }
+                    this.tr.append(td)
+                }
+                //capatcha
+                var td = document.createElement("td")
+                this.tr.append(td)
+
+                //zatwierdzenie
+                var td = document.createElement("td")
+                var img = document.createElement("img")
+                img.src="img/u.gif"
+                img.classList.add("tick")
+                td.append(img)
+                this.tr.append(td)
+
+                //eventy
+                this.flag.onclick=this.flagClick.bind(this)
+            }
+
+            flagClick(){
+                
+            }
+        }
         window.onload=function(){
-            gett()            
+            gett() 
+            console.log("a")           
         }
-        
-    function gett(){
-        var xhttp = new XMLHttpRequest(); 
-        xhttp.open("POST", "server.php", true);
-        
-        xhttp.onreadystatechange = function() {
-        //console.log(this.readyState);
-        if(this.readyState == 4 && this.status == 200) {
-                var ob=JSON.parse(this.responseText);
-                console.log(ob)
-                var table = document.getElementById("table")
-                ob.forEach(function(el,index){
-                    var html="<tr>" + "<td>" + el[1] + "</td>" + "<td>" + el[2] + "</td>" + "<td>" + el[3] + "</td>" + "<td>" + el[4] + "</td>" + "<td>" + el[5] + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "</tr>"   
-                    table.innerHTML+=html
-                })
-               
+        var alloys = [{"id":"2","nazwa":"aluminum"},{"id":"9","nazwa":"aluminum-bronze"},{"id":"1","nazwa":"bronze"},{"id":"10","nazwa":"copper plated zinc"},{"id":"3","nazwa":"copper-nickel"},{"id":"7","nazwa":"gold"},{"id":"5","nazwa":"nickel bonded steel"},{"id":"4","nazwa":"nickel clad steel"},{"id":"6","nazwa":"silver"},{"id":"11","nazwa":"stainless steel"},{"id":"8","nazwa":"zinc"}]
+        function gett(){
+            var xhttp = new XMLHttpRequest(); 
+            xhttp.open("POST", "server.php", true);
+            
+            xhttp.onreadystatechange = function() {
+            //console.log(this.readyState);
+            if(this.readyState == 4 && this.status == 200) {
+                    var ob=JSON.parse(this.responseText);
+                    //console.log(ob)
+                    var table = document.getElementById("table")
+                    ob.forEach(function(el,index){
+                        var moneta = new Monetka(el[1],el[2],el[3],el[4],el[5])
+                        table.append(moneta.tr)
+                    })
+                    
+            }
+            };
+            
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("f=get");
+
         }
-        };
-        
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("f=get");
- 
-    }
     </script>
     <style>
         table{
             border-collapse: collapse;
-            margin: 0 auto;
+            margin: 0 auto;  
+        }
+        .padding{
+            margin: 0 auto; 
+            width: auto;
+            height: auto;
+            padding: 8px;
+            background: rgba(200,200,200,0.8);
+            display: table;
         }
         tr,th,td{
             border:1px solid black;
             border-top: 0;
+            text-align: center;
+        }
+        th:nth-child(1),td:nth-child(1){
+            border-left: 0;
+        }
+        th:last-child,td:last-child{
+            border-right:0;
+        }
+        tr{
+            border-left: 0;
+            border-right:0;
+        }
+        .img{
+            width: 50px;
+            height: 30px;
+        }
+        .tick{
+            width:15px;
+            height: 15px;
         }
     </style>
 </head>
 <body>
-    <table id="table">
-        <tr>
-            <th>
+    <div class="padding">
+        <table id="table">
+            <tr>
+                <th>
 
-            </th>
-            <th>
-                Nominał
-            </th>
-            <th>
-                Nr. kat
-            </th>
-            <th>
-                Stop
-            </th>
-            <th>
-                Rok
-            </th>
-            <th>
-                Capatcha
-            </th>
-            <th>
-                
-            </th>
-        </tr>
-    </table>
+                </th>
+                <th style="width:100px;">
+                    Nominał
+                </th>
+                <th style="width:100px;">
+                    Nr. kat
+                </th>
+                <th style="width:300px;">
+                    Stop
+                </th>
+                <th style="width:50px;">
+                    Rok
+                </th>
+                <th style="width:100px;">
+                    Capatcha
+                </th>
+                <th style="width:20px;">
+                    
+                </th>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
