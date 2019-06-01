@@ -3,6 +3,8 @@ var fs = require("fs")
 var qs = require("querystring")
 var mongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID;
+var opers = require("./Modules/Operations.js")
+console.log(opers)
 
 var _db;
 var extensions={
@@ -41,9 +43,23 @@ function servResponse(req,res){
 
     req.on("end", function (data) {
         var finish = qs.parse(allData)
+        console.log(req.url, finish)
+        var coll = _db.collection("usersi")
         switch(req.url){
-            case "":
-
+            case "/add":
+                opers.Insert(coll,{login:finish.login,password:finish.password})
+                res.end("success")
+                break;
+            case "/get":
+                opers.SelectAll(coll, function(items){
+                    res.writeHead(200,{ "content-type": extensions["json"] })
+                    res.end(JSON.stringify(items))
+                })
+                
+                break;
+            case "/update":
+                opers.UpdateById(ObjectID,coll,finish)
+                res.end("success")
                 break;
             default:
 
@@ -56,6 +72,15 @@ server.listen(3000, function(){
    console.log("serwer startuje na porcie 3000")
 });
 
+mongoClient.connect("mongodb://localhost/3id1", function (err, db) {
+    if (err) console.log(err)
+    else console.log("mongo podłączone!")
+    //tu można operować na utworzonej bazie danych db lub podstawić jej obiekt 
+    // pod zmienną widoczną na zewnątrz    
+    _db = db;
+    db.createCollection("users", function (err, coll) {
+    })
+})
 
 
 
