@@ -7,10 +7,123 @@
     <title>Monetki</title>
     <script>
         class Monetka{
-            constructor(kraj,nominal,kat,stop,rok){
+            constructor(id,kraj,nominal,kat,stop,rok){
+                this.id=id
+                this.isClicked=false
                 this.tr=document.createElement("tr")
                 kraj=kraj.toUpperCase()
-                kraj+=".JPG"
+                this.kraj=kraj
+
+
+                this.nominal = nominal
+                this.kat=kat
+                this.rok=rok
+
+                this.alloy = stop
+
+                this.createRow([kraj,nominal,kat,stop,rok])
+            }
+
+            flagClick(){
+                this.isClicked=true
+
+                //flaga
+                this.tr.firstChild.removeChild(this.tr.firstChild.firstChild)
+                var select = document.createElement("select")
+                for(let i =0;i<flags.length;i++){
+                    var option = document.createElement("option")
+                    option.value=flags[i]
+                    option.innerText=flags[i]
+                    if(this.kraj==flags[i]){
+                        option.selected=true
+                    }
+                    select.append(option) 
+                }
+                this.tr.firstChild.appendChild(select)
+                this.tick.src="img/faja.png"
+
+                //nominal
+                this.tr.children[1].innerHTML=""
+                var input = document.createElement("input")
+                input.value = this.nominal
+                this.tr.children[1].appendChild(input)
+
+                //Nr.kat
+                this.tr.children[2].innerHTML=""
+                var input = document.createElement("input")
+                input.value = this.kat
+                this.tr.children[2].appendChild(input)
+
+
+                //alloy
+                var select = document.createElement("select")
+                this.stop.innerHTML=""
+                for(let i =0;i<alloys.length;i++){
+                    var option = document.createElement("option")
+                    option.value=alloys[i].nazwa
+                    option.innerText=alloys[i].nazwa
+                    if(this.alloy==alloys[i].nazwa){
+                        option.selected=true
+                    }
+                    select.append(option) 
+                }
+                this.tr.children[3].appendChild(select)
+
+                //Rok
+                this.tr.children[4].innerHTML=""
+                var input = document.createElement("input")
+                input.value = this.rok
+                this.tr.children[4].appendChild(input)
+            }
+
+            tickClick(){
+                if(this.isClicked){
+                    //update
+                    //kraj
+                    this.kraj = this.tr.children[0].children[0].options[this.tr.children[0].children[0].selectedIndex].value
+                    this.nominal = this.tr.children[1].children[0].value
+                    this.kat = this.tr.children[2].children[0].value
+                    this.alloy = this.tr.children[3].children[0].options[this.tr.children[3].children[0].selectedIndex].value
+                    this.rok = this.tr.children[4].children[0].value
+
+                    this.createRow([this.kraj,this.nominal,this.kat,this.alloy,this.rok])
+
+                    this.isClicked=false
+                    var xhttp = new XMLHttpRequest(); 
+                    xhttp.open("POST", "server.php", true);
+                    
+                    xhttp.onreadystatechange = function() {
+                    //console.log(this.readyState);
+                    if(this.readyState == 4 && this.status == 200) {
+                        if(this.responseText!=1){
+                            gett()
+                        }       
+                    }
+                    };
+                    
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("f=update&id="+this.id+"&kraj="+this.kraj+"&nominal="+this.nominal+"&kategoria="+this.kat+"&stop="+this.alloy+"&rok="+this.rok);
+                }else{
+                    //delete
+                    var xhttp = new XMLHttpRequest(); 
+                    xhttp.open("POST", "server.php", true);
+                    
+                    xhttp.onreadystatechange = function() {
+                    //console.log(this.readyState);
+                    if(this.readyState == 4 && this.status == 200) {
+                            gett()      
+                    }
+                    };
+                    
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("f=delete&id="+this.id);
+
+                }
+            }
+            createRow(args){
+                this.tr.innerHTML=""
+
+                var kraj=this.kraj+".JPG"
                 for(let i =0;i<5;i++){
                     var td = document.createElement("td")
                     if(i==0){
@@ -20,12 +133,17 @@
                         td.append(img)
                         this.flag=img
                     }else{
-                        td.innerText=arguments[i]
+                        td.innerText=args[i]
+                        if(i==3){
+                            this.stop=td
+                        }
                     }
                     this.tr.append(td)
                 }
                 //capatcha
                 var td = document.createElement("td")
+                var input = document.createElement("input")
+                td.append(input)
                 this.tr.append(td)
 
                 //zatwierdzenie
@@ -33,21 +151,41 @@
                 var img = document.createElement("img")
                 img.src="img/u.gif"
                 img.classList.add("tick")
+                this.tick=img
                 td.append(img)
                 this.tr.append(td)
 
                 //eventy
                 this.flag.onclick=this.flagClick.bind(this)
+                this.tick.onclick=this.tickClick.bind(this)
             }
+        }
 
-            flagClick(){
-                
-            }
-        }
+
+
+
+
+
         window.onload=function(){
-            gett() 
-            console.log("a")           
+            gett()  
+            var select = document.getElementById("stop")
+            for(let i =0;i<alloys.length;i++){
+                var option = document.createElement("option")
+                option.value=alloys[i].nazwa
+                option.innerText=alloys[i].nazwa
+                select.append(option) 
+            }  
+            var select = document.getElementById("kraj")
+            for(let i =0;i<flags.length;i++){
+                var option = document.createElement("option")
+                option.value=flags[i]
+                option.innerText=flags[i]
+                select.append(option) 
+            }
+            document.getElementById("imgDodaj").onclick=dodaj
         }
+
+        var flags = ["ARUBA","BARBADOS","GRECJA","HAITI","ISLANDIA","JAMAJKA","KIRIBATI","LIBAN","MAKAU","MALEDIWY","NEPAL","POLSKA","SESZELE"]
         var alloys = [{"id":"2","nazwa":"aluminum"},{"id":"9","nazwa":"aluminum-bronze"},{"id":"1","nazwa":"bronze"},{"id":"10","nazwa":"copper plated zinc"},{"id":"3","nazwa":"copper-nickel"},{"id":"7","nazwa":"gold"},{"id":"5","nazwa":"nickel bonded steel"},{"id":"4","nazwa":"nickel clad steel"},{"id":"6","nazwa":"silver"},{"id":"11","nazwa":"stainless steel"},{"id":"8","nazwa":"zinc"}]
         function gett(){
             var xhttp = new XMLHttpRequest(); 
@@ -59,8 +197,9 @@
                     var ob=JSON.parse(this.responseText);
                     //console.log(ob)
                     var table = document.getElementById("table")
+                    table.innerHTML="<tr><th style='width:75px;'></th><th style='width:100px;'>Nominał</th><th style='width:100px;'>Nr. kat</th><th style='width:300px;'>Stop</th><th style='width:50px;'>Rok</th><th style='width:100px;'>Capatcha</th><th style='width:20px;'></th></tr>"
                     ob.forEach(function(el,index){
-                        var moneta = new Monetka(el[1],el[2],el[3],el[4],el[5])
+                        var moneta = new Monetka(el[0],el[1],el[2],el[3],el[4],el[5])
                         table.append(moneta.tr)
                     })
                     
@@ -70,6 +209,26 @@
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("f=get");
 
+        }
+        function dodaj(){
+            var kraj = document.getElementById("kraj").options[document.getElementById("kraj").selectedIndex].value
+            var nominal = document.getElementById("nominal").value
+            var kat = document.getElementById("kategoria").value
+            var stop =document.getElementById("stop").options[document.getElementById("stop").selectedIndex].value
+            var rok = document.getElementById("rok").value
+
+            var xhttp = new XMLHttpRequest(); 
+            xhttp.open("POST", "server.php", true);
+            
+            xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                gett()
+                    
+            }
+            };
+            
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("f=add&kraj="+kraj+"&nominal="+nominal+"&kategoria="+kat+"&stop="+stop+"&rok="+rok);
         }
     </script>
     <style>
@@ -103,39 +262,24 @@
         .img{
             width: 50px;
             height: 30px;
+            cursor: pointer;
         }
-        .tick{
+        .tick,#imgDodaj{
             width:15px;
             height: 15px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="padding">
         <table id="table">
-            <tr>
-                <th>
-
-                </th>
-                <th style="width:100px;">
-                    Nominał
-                </th>
-                <th style="width:100px;">
-                    Nr. kat
-                </th>
-                <th style="width:300px;">
-                    Stop
-                </th>
-                <th style="width:50px;">
-                    Rok
-                </th>
-                <th style="width:100px;">
-                    Capatcha
-                </th>
-                <th style="width:20px;">
-                    
-                </th>
-            </tr>
+            
+        </table>
+        <p>Dodaj nowy rekord</p>
+        <table>
+            <tr><th style='width:75px;'></th><th style='width:100px;'>Nominał</th><th style='width:100px;'>Nr. kat</th><th style='width:300px;'>Stop</th><th style='width:50px;'>Rok</th><th style='width:100px;'>Capatcha</th><th style='width:20px;'></th></tr>
+            <tr><td> <select name="kraj" id="kraj"></select></td><td><input type="text" id="nominal"></td><td><input type="text" id="kategoria"></td><td><select name="stop" id="stop"></select></td><td><input type="number" id="rok"></td><td><input type="text" id="capatcha"></td><td><img src="img/faja.png" alt="" id="imgDodaj"> </td> </tr>
         </table>
     </div>
 </body>
