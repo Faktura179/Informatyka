@@ -5,8 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin</title>
+    <script src="jquery.js"></script>
+    <script src="adminUi.js"></script>
+    <script src="adminNet.js"></script>
+    <script src="Admin.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            height: 100vh;
+            clear: both;
+            overflow: auto;
+        }
+        #header{
+            background: grey;
+            clear: both;
+            padding: 10px;
+        }
+        #content{
+            height: 100%;
+            background: #dddddd;
+            overflow: auto;
+            clear:both;
+            padding: 5px;
+        }
+        #polacz{
+            float: right;
+        }
+        #left{
+            width: 40%;
+            float: left;
+            height: 100%
+        }
+        #right{
+            float: left;
+            height: 100%;
+            width:60%;
+        }
+        .text{
+            display: inline;
+            color: blue;
+        }
+        #bazy,#kolekcje{
+            display: block;
+            width: 100%;
+        }
+        option{
+            margin:5px;
+            padding: 5px;
+            color:blue;
+        }
+    </style>
 </head>
 <body>
-    
+    <div id="header">MongoDB myAdmin - połączono z: <p id="server" class="text"></p> <button id="polacz">Połącz z serwerem mongo</button></div>
+    <div id="content">
+        <div id="left">
+            <div>
+                <div>Bieżącza baza: <p id="baza"  class="text"></p></div>
+                <button id="add_db">Dodaj Bazę</button> <button id="del_db">Usuń bazę</button>
+                <select name="" id="bazy" size="10"></select>
+            </div>
+            <div>
+                <div>Bieżącza kolekcja: <p id="kolekcja"  class="text"></p></div>
+                <button id="add_col">Dodaj Kolekcje</button> <button id="del_col">Usuń kolekcje</button>
+                <select name="" id="kolekcje" size="10"></select>
+            </div>
+        </div>
+        <div id="right"></div>
+    </div>
 </body>
 </html>

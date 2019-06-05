@@ -46,5 +46,76 @@ module.exports = {
                 console.log("update: "+data)                  
             })
     },
- 
+
+    //create collection
+
+    CreateCollection:function(db, collName, callback){
+        db.createCollection(collName, function(err, result) {
+            if (err) console.log(err);
+            else{
+                console.log("Collection is created!");
+                // close the connection to db when you are done with it
+                callback(result)
+            }
+        });
+    },   
+
+    //delete collection
+
+    DeleteCollection:function(db,collName, callback){
+        // db.collection(collName, function(err, collection) {
+        //     // handle the error if any
+        //     if (err) console.log(err);
+        //     // delete the mongodb collection
+        //     collection.remove({}, function(err, result){
+        //         // handle the error if any
+        //         if (err)  console.log(err);
+        //         console.log("Collection is deleted! "+result);
+        //         callback()
+        //     });
+        // });
+        db.dropCollection(collName,function(err, result){
+            if (err)  console.log(err);
+                console.log("Collection is deleted! "+result);
+                callback()
+        })
+    },
+
+    //list collections
+
+    ListCollections: function(db,callback){
+        db.listCollections().toArray(function(err, collInfos) {
+            // collInfos is an array of collection info objects that look like:
+            // { name: 'test', options: {} }
+            console.log(collInfos)
+            callback(collInfos)
+        });
+    },
+
+    //list databases
+
+    ListDatabases:function(db, callback){
+        db.admin().listDatabases(function (err, dbs) {
+                
+            if (err) {console.log(err)}
+            else {                   
+               //console.log(dbs.databases) 
+         
+               var databases = dbs.databases.filter(el=>{return (el.name!="admin" && el.name!="config" && el.name!="local")})
+               console.log(databases) 
+                callback(databases)        
+            }
+         })
+    },
+
+    // drop databases
+
+    DropDatabase:function(db,callback){
+        db.dropDatabase(function(err, result){
+            if (err) console.log("Error : "+err);;
+            console.log("DB Dropped ? "+result);
+            // after all the operations with db, close it.
+            callback()
+        });
+    },
 }

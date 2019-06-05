@@ -4,7 +4,7 @@ var qs = require("querystring")
 var mongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID;
 var opers = require("./Modules/Operations.js")
-console.log(opers)
+//console.log(opers)
 
 var _db;
 var extensions={
@@ -60,6 +60,72 @@ function servResponse(req,res){
             case "/update":
                 opers.UpdateById(ObjectID,coll,finish)
                 res.end("success")
+                break;
+            case "/connect":
+                mongoClient.connect("mongodb://"+finish.ip+"/", function (err, db) {
+                    if (err){ console.log(err);res.writeHead(400,{ "content-type": extensions["txt"] });res.end()}
+                    else{ console.log("mongo podłączone!")
+                        //tu można operować na utworzonej bazie danych db lub podstawić jej obiekt 
+                        // pod zmienną widoczną na zewnątrz    
+                        //console.log(db)
+                        opers.ListDatabases(db,function(databases){
+                            res.writeHead(200,{ "content-type": extensions["json"] })   
+                            res.end(JSON.stringify({dbs:databases, ip:finish.ip}))
+                        })
+                    }
+                })
+                break;
+            case "/collections":
+                mongoClient.connect("mongodb://"+finish.ip+"/"+finish.db, function (err, db) {
+                    if (err){ console.log(err)}
+                    else{ console.log("mongo podłączone!")
+                        //tu można operować na utworzonej bazie danych db lub podstawić jej obiekt 
+                        // pod zmienną widoczną na zewnątrz    
+                        //console.log(db)
+                        _db=db
+                        opers.ListCollections(db,function(collections){
+                            res.writeHead(200,{ "content-type": extensions["json"] })   
+                            res.end(JSON.stringify({collections:collections}))
+                        })
+                    }
+                })
+                break;
+            case "/add_db":
+                mongoClient.connect("mongodb://"+finish.ip+"/"+finish.db, function (err, db) {
+                    if (err){ console.log(err)}
+                    else{ console.log("mongo podłączone!")
+                        opers.CreateCollection(db,"test",()=>{
+                            opers.ListDatabases(db,function(databases){
+                                res.writeHead(200,{ "content-type": extensions["json"] })   
+                                res.end(JSON.stringify({dbs:databases}))
+                            })
+                        })
+                    }
+                })
+                break;
+            case "/del_db":
+                opers.DropDatabase(_db,()=>{
+                    opers.ListDatabases(_db,function(databases){
+                        res.writeHead(200,{ "content-type": extensions["json"] })   
+                        res.end(JSON.stringify({dbs:databases}))
+                    })
+                })
+                break;
+            case "/add_col":
+                opers.CreateCollection(_db,finish.col,()=>{
+                    opers.ListCollections(_db,function(collections){
+                        res.writeHead(200,{ "content-type": extensions["json"] })   
+                        res.end(JSON.stringify({collections:collections}))
+                    })
+                })
+                break;
+            case "/del_col":
+                opers.DeleteCollection(_db,finish.col,()=>{
+                    opers.ListCollections(_db,function(collections){
+                        res.writeHead(200,{ "content-type": extensions["json"] })   
+                        res.end(JSON.stringify({collections:collections}))
+                    })
+                })
                 break;
             default:
 
